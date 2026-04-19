@@ -3,8 +3,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "4173:4173"
+    expose:
+      - "4173"
     env_file:
       - .env
     restart: unless-stopped
+    networks:
+      - coolify
+
+networks:
+  coolify:
+    external: true
