@@ -1,25 +1,82 @@
+import { useEffect, useRef, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { FiChevronDown } from 'react-icons/fi'
+import gsap from 'gsap'
 import Button from '../common/Button'
+import { useMagneticEffect, useCounterAnimation } from '../../hooks/useGSAPAnimations'
 
 const STATS = [
-  { value: '+15', label: 'Años de experiencia' },
-  { value: '+5K', label: 'Pacientes atendidos' },
-  { value: '4.9★', label: 'Calificación Google' },
+  { value: '+15', label: 'Años de experiencia', counter: 15, prefix: '+', suffix: '' },
+  { value: '+5K', label: 'Pacientes atendidos', counter: 5, prefix: '+', suffix: 'K' },
+  { value: '4.9★', label: 'Calificación Google', counter: null },
 ]
 
-// Animated eye SVG with orbiting ring and pulsing pupil
+// Ambient drifting particles in hero background
+function FloatingParticles() {
+  const containerRef = useRef(null)
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 22 }, (_, i) => ({
+        id: i,
+        size: 2 + (i % 5),
+        color: ['#3238A6', '#117DBF', '#E8A838'][i % 3],
+      })),
+    []
+  )
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+    const els = container.querySelectorAll('.fp')
+
+    const randomize = (el) =>
+      gsap.set(el, {
+        left: `${Math.random() * 100}%`,
+        top: `${40 + Math.random() * 60}%`,
+        opacity: 0.08 + Math.random() * 0.28,
+        y: 0,
+        x: 0,
+      })
+
+    els.forEach((el) => {
+      randomize(el)
+      gsap.to(el, {
+        y: -(130 + Math.random() * 200),
+        x: (Math.random() - 0.5) * 120,
+        opacity: 0,
+        duration: 5 + Math.random() * 7,
+        ease: 'power1.inOut',
+        repeat: -1,
+        delay: Math.random() * 6,
+        onRepeat() { randomize(el) },
+      })
+    })
+
+    return () => gsap.killTweensOf(els)
+  }, [])
+
+  return (
+    <div ref={containerRef} className="absolute inset-0 pointer-events-none overflow-hidden">
+      {particles.map(({ id, size, color }) => (
+        <div
+          key={id}
+          className="fp absolute rounded-full"
+          style={{ width: size, height: size, background: color, opacity: 0 }}
+        />
+      ))}
+    </div>
+  )
+}
+
 function AnimatedEye() {
   return (
     <div className="relative flex items-center justify-center w-64 h-64 sm:w-80 sm:h-80">
-      {/* Outer glow ring */}
       <motion.div
         className="absolute inset-0 rounded-full border-2 border-primary/20"
         animate={{ scale: [1, 1.08, 1], opacity: [0.4, 0.8, 0.4] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       />
-      {/* Orbiting dot */}
       <motion.div
         className="absolute inset-0"
         animate={{ rotate: 360 }}
@@ -27,7 +84,6 @@ function AnimatedEye() {
       >
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-accent shadow-lg" />
       </motion.div>
-      {/* Second orbiting dot (opposite) */}
       <motion.div
         className="absolute inset-0"
         animate={{ rotate: -360 }}
@@ -36,7 +92,6 @@ function AnimatedEye() {
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 rounded-full bg-primary/60" />
       </motion.div>
 
-      {/* Central card */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -44,7 +99,6 @@ function AnimatedEye() {
         className="relative z-10 w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-primary shadow-2xl flex flex-col items-center justify-center"
         style={{ rotate: '6deg' }}
       >
-        {/* Eye illustration */}
         <motion.div
           animate={{ scaleY: [1, 0.1, 1] }}
           transition={{ duration: 4, repeat: Infinity, repeatDelay: 2, ease: 'easeInOut' }}
@@ -65,7 +119,6 @@ function AnimatedEye() {
         <p className="text-white/70 text-xs mt-2 tracking-wider font-medium">OpticaMilap</p>
       </motion.div>
 
-      {/* Floating mini-badges */}
       <motion.div
         className="absolute top-4 right-4 bg-white rounded-xl px-3 py-1.5 shadow-lg border border-gray-100"
         animate={{ y: [0, -6, 0] }}
@@ -88,6 +141,8 @@ function AnimatedEye() {
 
 export default function Hero() {
   const navigate = useNavigate()
+  const magnetRef = useMagneticEffect(0.4)
+  const statsRef = useCounterAnimation()
 
   return (
     <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden bg-white pt-20">
@@ -102,6 +157,9 @@ export default function Hero() {
           style={{ background: 'radial-gradient(circle, #117DBF, transparent 70%)' }}
         />
       </div>
+
+      {/* Ambient floating particles */}
+      <FloatingParticles />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -144,27 +202,44 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Button onClick={() => navigate('/citas')} size="lg">Agenda tu Cita</Button>
-              <Button variant="secondary" onClick={() => document.querySelector('#nosotros')?.scrollIntoView({ behavior: 'smooth' })} size="lg">Conocer Más</Button>
+              {/* Magnetic wrapper around primary CTA */}
+              <div ref={magnetRef} className="inline-block">
+                <Button onClick={() => navigate('/citas')} size="lg">Agenda tu Cita</Button>
+              </div>
+              <Button
+                variant="secondary"
+                onClick={() => document.querySelector('#nosotros')?.scrollIntoView({ behavior: 'smooth' })}
+                size="lg"
+              >
+                Conocer Más
+              </Button>
             </motion.div>
 
-            {/* Stats */}
+            {/* Stats with counter animation */}
             <motion.div
+              ref={statsRef}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
               className="mt-12 grid grid-cols-3 gap-4 max-w-sm"
             >
-              {STATS.map(({ value, label }) => (
+              {STATS.map(({ value, label, counter, prefix, suffix }) => (
                 <div key={label} className="text-center bg-primary rounded-2xl p-4 shadow-md">
-                  <p className="text-xl font-bold text-white">{value}</p>
+                  <p
+                    className="text-xl font-bold text-white"
+                    data-counter={counter ?? undefined}
+                    data-prefix={prefix || undefined}
+                    data-suffix={suffix || undefined}
+                  >
+                    {value}
+                  </p>
                   <p className="text-xs text-white/70 mt-0.5 leading-tight">{label}</p>
                 </div>
               ))}
             </motion.div>
           </div>
 
-          {/* Right: animated central image */}
+          {/* Right: animated eye */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}

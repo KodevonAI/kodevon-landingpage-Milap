@@ -3,6 +3,7 @@ import { FiAward, FiZap, FiHeart } from 'react-icons/fi'
 import { motion } from 'framer-motion'
 import ScrollReveal from '../animations/ScrollReveal'
 import Button from '../common/Button'
+import { useCounterAnimation } from '../../hooks/useGSAPAnimations'
 
 const pillars = [
   { icon: FiAward, label: 'Certificados', desc: 'Optómetras con amplia experiencia' },
@@ -11,20 +12,21 @@ const pillars = [
 ]
 
 const stats = [
-  { value: '+15', label: 'Años', sub: 'de experiencia' },
-  { value: '+5K', label: 'Pacientes', sub: 'atendidos' },
-  { value: '100%', label: 'Garantía', sub: 'en productos' },
+  { value: '+15', label: 'Años', sub: 'de experiencia', counter: 15, prefix: '+', suffix: '' },
+  { value: '+5K', label: 'Pacientes', sub: 'atendidos', counter: 5, prefix: '+', suffix: 'K' },
+  { value: '100%', label: 'Garantía', sub: 'en productos', counter: 100, prefix: '', suffix: '%' },
 ]
 
 export default function QuienesSomos() {
   const navigate = useNavigate()
+  const counterRef = useCounterAnimation()
 
   return (
     <section id="nosotros" className="py-20 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
 
-          {/* Left: visual card + stats */}
+          {/* Left: visual card + animated stats */}
           <ScrollReveal direction="left">
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl overflow-hidden bg-gradient-to-br from-primary to-accent flex flex-col items-center justify-center shadow-2xl relative">
@@ -47,10 +49,18 @@ export default function QuienesSomos() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 mt-4">
-                {stats.map(({ value, label, sub }) => (
+              {/* Stats grid with counter animation */}
+              <div ref={counterRef} className="grid grid-cols-3 gap-3 mt-4">
+                {stats.map(({ value, label, sub, counter, prefix, suffix }) => (
                   <div key={label} className="bg-neutral rounded-2xl p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{value}</p>
+                    <p
+                      className="text-2xl font-bold text-primary"
+                      data-counter={counter}
+                      data-prefix={prefix || undefined}
+                      data-suffix={suffix || undefined}
+                    >
+                      {value}
+                    </p>
                     <p className="text-xs font-semibold text-dark mt-0.5">{label}</p>
                     <p className="text-xs text-gray-400">{sub}</p>
                   </div>

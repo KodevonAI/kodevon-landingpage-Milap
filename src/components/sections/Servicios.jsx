@@ -1,7 +1,12 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiEye, FiCircle, FiTool, FiX, FiClock, FiCheck } from 'react-icons/fi'
+import gsap from 'gsap'
+import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
+import { SERVICES } from '../../utils/constants'
+import Button from '../common/Button'
+import ScrollReveal from '../animations/ScrollReveal'
 
 function GlassesIcon({ size = 24, className = '' }) {
   return (
@@ -14,12 +19,51 @@ function GlassesIcon({ size = 24, className = '' }) {
   )
 }
 
-import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
-import { SERVICES } from '../../utils/constants'
-import Button from '../common/Button'
-import ScrollReveal from '../animations/ScrollReveal'
-
 const iconMap = { eye: FiEye, glasses: GlassesIcon, contact: FiCircle, tools: FiTool }
+
+// 3D tilt card — replaces framer-motion whileHover for service cards
+function TiltCard({ children, className, onClick }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    el.style.transformStyle = 'preserve-3d'
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect()
+      const x = ((e.clientX - r.left) / r.width - 0.5) * 2
+      const y = ((e.clientY - r.top) / r.height - 0.5) * 2
+      gsap.to(el, {
+        rotateY: x * 14,
+        rotateX: -y * 10,
+        scale: 1.04,
+        boxShadow: '0 25px 50px rgba(50,56,166,0.25)',
+        transformPerspective: 700,
+        duration: 0.3,
+        ease: 'power2.out',
+      })
+    }
+    const onLeave = () =>
+      gsap.to(el, {
+        rotateY: 0,
+        rotateX: 0,
+        scale: 1,
+        boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+        duration: 0.7,
+        ease: 'elastic.out(1, 0.4)',
+      })
+    el.addEventListener('mousemove', onMove)
+    el.addEventListener('mouseleave', onLeave)
+    return () => {
+      el.removeEventListener('mousemove', onMove)
+      el.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
+  return (
+    <div ref={ref} className={className} onClick={onClick}>
+      {children}
+    </div>
+  )
+}
 
 export default function Servicios() {
   const [selected, setSelected] = useState(null)
@@ -42,11 +86,10 @@ export default function Servicios() {
           {SERVICES.map((service) => {
             const Icon = iconMap[service.icon]
             return (
-              <motion.div
+              <TiltCard
                 key={service.id}
                 onClick={() => setSelected(service)}
-                className="bg-primary rounded-2xl p-7 cursor-pointer group shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
-                whileHover={{ y: -5, scale: 1.02 }}
+                className="bg-primary rounded-2xl p-7 cursor-pointer group shadow-md flex flex-col"
               >
                 <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center mb-5 group-hover:bg-white/25 transition-colors duration-300">
                   <Icon size={24} className="text-white" />
@@ -62,7 +105,7 @@ export default function Servicios() {
                     Ver más →
                   </span>
                 </div>
-              </motion.div>
+              </TiltCard>
             )
           })}
         </div>
