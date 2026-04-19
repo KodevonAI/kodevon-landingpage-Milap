@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.opticamilap.com/sitemap.xml
