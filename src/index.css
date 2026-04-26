@@ -1,18 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Noto+Sans:wght@300;400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #3238A6;
-  --color-primary-dark: #2E338C;
-  --color-accent: #117DBF;
-  --color-cream: #F2EBC9;
-  --color-neutral: #F2F2F2;
-  --color-dark: #1a1a2e;
-  --color-dark-800: #16172a;
+  /* Brand */
+  --color-primary: #0F172A;
+  --color-primary-dark: #0A0F1A;
+  --color-accent: #0369A1;
+  --color-accent-light: #0EA5E9;
+  --color-accent-muted: #E0F2FE;
 
-  --font-sans: 'Poppins', sans-serif;
-  --font-display: 'Inter', sans-serif;
+  /* Surfaces */
+  --color-background: #F8FAFC;
+  --color-card: #FFFFFF;
+  --color-muted: #E8ECF1;
+  --color-border: #E2E8F0;
+
+  /* Text */
+  --color-foreground: #020617;
+  --color-slate: #64748B;
+  --color-slate-light: #94A3B8;
+
+  /* Legacy (keep for compatibility) */
+  --color-cream: #F0F9FF;
+  --color-neutral: #F1F5F9;
+  --color-dark: #0F172A;
+  --color-dark-800: #1E293B;
+
+  /* Typography */
+  --font-sans: 'Noto Sans', sans-serif;
+  --font-display: 'Figtree', sans-serif;
 }
 
 *, *::before, *::after {
@@ -25,9 +42,9 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background-color: #ffffff;
-  color: var(--color-dark);
+  font-family: 'Noto Sans', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -35,4 +52,12 @@ body {
 #root {
   width: 100%;
   min-height: 100vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

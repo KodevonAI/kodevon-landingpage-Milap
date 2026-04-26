@@ -13,25 +13,26 @@ export default function Button({
   target,
 }) {
   const base =
-    'inline-flex items-center justify-center font-semibold rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
+    'inline-flex items-center justify-center font-semibold rounded-full transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer'
 
   const variants = {
     primary:
-      'bg-primary text-white hover:bg-primary-dark focus-visible:ring-primary shadow-lg hover:shadow-xl',
+      'bg-accent text-white hover:bg-[#025d8f] focus-visible:ring-accent shadow-md hover:shadow-lg',
     secondary:
       'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white focus-visible:ring-primary',
     accent:
-      'bg-accent text-white hover:bg-[#0e6ea8] focus-visible:ring-accent shadow-lg hover:shadow-xl',
+      'bg-accent-light text-white hover:bg-accent focus-visible:ring-accent-light shadow-md hover:shadow-lg',
     ghost: 'bg-white/10 text-white border border-white/30 hover:bg-white/20 focus-visible:ring-white',
+    outline: 'bg-white border border-border text-foreground hover:border-accent hover:text-accent focus-visible:ring-accent shadow-sm',
   }
 
   const sizes = {
-    sm: 'px-5 py-2 text-sm',
-    md: 'px-7 py-3 text-base',
-    lg: 'px-9 py-4 text-lg',
+    sm: 'px-5 py-2 text-sm gap-1.5',
+    md: 'px-6 py-2.5 text-sm gap-2',
+    lg: 'px-8 py-3.5 text-base gap-2',
   }
 
-  const classes = `${base} ${variants[variant]} ${sizes[size]} ${disabled || loading ? 'opacity-60 cursor-not-allowed' : ''} ${className}`
+  const classes = `${base} ${variants[variant]} ${sizes[size]} ${disabled || loading ? 'opacity-50 cursor-not-allowed' : ''} ${className}`
 
   const content = loading ? (
     <span className="flex items-center gap-2">
@@ -50,8 +51,8 @@ export default function Button({
         target={target}
         rel={target === '_blank' ? 'noopener noreferrer' : undefined}
         className={classes}
-        whileHover={!disabled ? { scale: 1.03 } : {}}
-        whileTap={!disabled ? { scale: 0.97 } : {}}
+        whileHover={!disabled ? { scale: 1.02 } : {}}
+        whileTap={!disabled ? { scale: 0.98 } : {}}
       >
         {content}
       </motion.a>
@@ -64,8 +65,8 @@ export default function Button({
       onClick={onClick}
       disabled={disabled || loading}
       className={classes}
-      whileHover={!disabled && !loading ? { scale: 1.03 } : {}}
-      whileTap={!disabled && !loading ? { scale: 0.97 } : {}}
+      whileHover={!disabled && !loading ? { scale: 1.02 } : {}}
+      whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
     >
       {content}
     </motion.button>

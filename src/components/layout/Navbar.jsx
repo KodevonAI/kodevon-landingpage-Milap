@@ -14,13 +14,15 @@ const links = [
 ]
 
 const navLinkClass = ({ isActive }) =>
-  `px-3 py-1.5 rounded-lg text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
-    isActive ? 'text-primary bg-primary/10' : 'text-gray-600 hover:text-primary hover:bg-primary/5'
+  `px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 ${
+    isActive
+      ? 'text-accent bg-accent/8 font-semibold'
+      : 'text-slate hover:text-foreground hover:bg-muted'
   }`
 
 const mobileNavLinkClass = ({ isActive }) =>
-  `block w-full text-left px-4 py-2.5 rounded-xl font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-    isActive ? 'text-primary bg-primary/10' : 'text-gray-700 hover:bg-primary/8 hover:text-primary'
+  `block w-full text-left px-4 py-3 rounded-xl font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+    isActive ? 'text-accent bg-accent/8 font-semibold' : 'text-foreground hover:bg-muted hover:text-accent'
   }`
 
 export default function Navbar() {
@@ -37,32 +39,34 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Scroll progress indicator */}
       <div
         ref={progressRef}
-        className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-gradient-to-r from-primary via-accent to-primary"
+        className="fixed top-0 left-0 right-0 z-[60] h-[2px] bg-gradient-to-r from-accent via-accent-light to-accent"
         style={{ transformOrigin: 'left center' }}
       />
 
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
         className="fixed top-0 left-0 right-0 z-50 px-4 pt-3"
       >
         <nav
-          className={`max-w-5xl mx-auto rounded-2xl px-5 h-14 flex items-center justify-between transition-all duration-400 ${
+          className={`max-w-5xl mx-auto rounded-2xl px-5 h-14 flex items-center justify-between transition-all duration-300 ${
             scrolled
-              ? 'bg-white/80 backdrop-blur-xl shadow-lg border border-white/60'
-              : 'bg-white/30 backdrop-blur-md border border-white/20 shadow-md'
+              ? 'bg-white/90 backdrop-blur-xl shadow-lg border border-border'
+              : 'bg-white/50 backdrop-blur-md border border-white/40 shadow-sm'
           }`}
         >
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg"
+            className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-lg"
             aria-label="Ir al inicio"
           >
-            <img src={logo} alt="OpticaMilap logo" className="h-9 w-auto" />
+            <img src={logo} alt="OpticaMilap logo" className="h-8 w-auto" />
+            <span className="font-display font-bold text-sm text-primary hidden sm:block tracking-tight">
+              OpticaMilap
+            </span>
           </button>
 
           <ul className="hidden md:flex items-center gap-0.5">
@@ -79,24 +83,24 @@ export default function Navbar() {
 
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-lg text-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="md:hidden p-2 rounded-xl text-foreground hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-colors"
             aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={open}
           >
-            {open ? <FiX size={22} /> : <FiMenu size={22} />}
+            {open ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
         </nav>
 
         <AnimatePresence>
           {open && (
             <motion.div
-              initial={{ opacity: 0, y: -8, scale: 0.97 }}
+              initial={{ opacity: 0, y: -6, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.97 }}
-              transition={{ duration: 0.2 }}
-              className="max-w-5xl mx-auto mt-2 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/60 overflow-hidden"
+              exit={{ opacity: 0, y: -6, scale: 0.98 }}
+              transition={{ duration: 0.18 }}
+              className="max-w-5xl mx-auto mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border overflow-hidden"
             >
-              <ul className="px-4 py-3 space-y-1">
+              <ul className="px-3 py-3 space-y-0.5">
                 {links.map(({ label, to }) => (
                   <li key={to}>
                     <NavLink to={to} end={to === '/'} onClick={() => setOpen(false)} className={mobileNavLinkClass}>
@@ -104,7 +108,7 @@ export default function Navbar() {
                     </NavLink>
                   </li>
                 ))}
-                <li className="pt-2 pb-1">
+                <li className="pt-2 pb-1 px-1">
                   <Button onClick={() => { setOpen(false); navigate('/citas') }} className="w-full justify-center">
                     Agendar Cita
                   </Button>
