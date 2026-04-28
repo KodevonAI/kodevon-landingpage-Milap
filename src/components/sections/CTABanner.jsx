@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { FiArrowRight, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { BUSINESS } from '../../utils/constants'
-import Button from '../common/Button'
 
 export default function CTABanner() {
   const navigate = useNavigate()
@@ -51,14 +50,16 @@ export default function CTABanner() {
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3 shrink-0">
-              <Button
-                size="lg"
+              <motion.button
                 onClick={() => navigate('/citas')}
-                className="bg-white text-accent hover:bg-accent-muted border-0 shadow-lg whitespace-nowrap"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold cursor-pointer whitespace-nowrap shadow-lg transition-colors duration-150 hover:bg-blue-50"
+                style={{ background: '#ffffff', color: '#0369A1' }}
               >
                 Agenda tu Cita
                 <FiArrowRight size={16} />
-              </Button>
+              </motion.button>
               <div className="flex gap-3">
                 <a
                   href={BUSINESS.whatsapp}
