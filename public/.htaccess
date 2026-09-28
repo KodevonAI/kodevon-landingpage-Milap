@@ -1,4 +1,24 @@
 Options -MultiViews
+DirectorySlash Off
 RewriteEngine On
+
+# Dominio canónico: https://www.opticamilap.com
+RewriteCond %{HTTP_HOST} ^opticamilap\.com$ [NC]
+RewriteRule ^ https://www.opticamilap.com%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# /index.html y /ruta.html -> URL limpia
+RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
+RewriteRule ^ / [R=301,L]
+RewriteCond %{THE_REQUEST} \s/([^.?\s]+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# Rutas pre-renderizadas: /servicios -> servicios.html
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.html [QL]
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^([^.]+?)/?$ $1.html [L]
+
+# Cualquier otra URL inexistente responde 404 real
+ErrorDocument 404 /404.html

@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+
+const MotionLink = motion.create(Link)
 
 export default function Button({
   children,
@@ -10,6 +13,7 @@ export default function Button({
   type = 'button',
   onClick,
   href,
+  to,
   target,
 }) {
   const base =
@@ -43,6 +47,20 @@ export default function Button({
       {children}
     </span>
   ) : children
+
+  if (to) {
+    return (
+      <MotionLink
+        to={to}
+        onClick={onClick}
+        className={classes}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        {content}
+      </MotionLink>
+    )
+  }
 
   if (href) {
     return (

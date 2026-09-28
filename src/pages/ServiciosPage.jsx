@@ -4,7 +4,7 @@ import PorqueElegir from '../components/sections/PorqueElegir'
 export default function ServiciosPage() {
   return (
     <>
-      <Servicios />
+      <Servicios titleAs="h1" />
       <PorqueElegir />
     </>
   )

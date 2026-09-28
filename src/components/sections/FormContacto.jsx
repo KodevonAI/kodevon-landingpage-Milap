@@ -21,7 +21,8 @@ const contacts = [
   { icon: FiInstagram, label: 'Instagram', value: '@opticamilap', href: BUSINESS.instagram },
 ]
 
-export default function FormContacto() {
+export default function FormContacto({ titleAs = 'h2' }) {
+  const Title = titleAs
   const [toast, setToast] = useState({ message: '', type: 'success' })
 
   const {
@@ -46,11 +47,11 @@ export default function FormContacto() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up" className="text-center mb-14">
           <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Contacto</p>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-dark">
+          <Title className="font-display text-3xl sm:text-4xl font-bold text-dark">
             Hablemos,
             <br />
             <span className="text-primary">¿en qué te ayudamos?</span>
-          </h2>
+          </Title>
         </ScrollReveal>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

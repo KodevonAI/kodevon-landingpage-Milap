@@ -5,7 +5,7 @@ import FAQ from '../components/sections/FAQ'
 export default function ContactoPage() {
   return (
     <>
-      <FormContacto />
+      <FormContacto titleAs="h1" />
       <Ubicacion />
       <FAQ />
     </>

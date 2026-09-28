@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiMenu, FiX, FiArrowRight } from 'react-icons/fi'
 import logo from '../../assets/logo.webp'
 import { useScrollProgress } from '../../hooks/useGSAPAnimations'
+
+const MotionLink = motion.create(Link)
 
 const links = [
   { label: 'Inicio', to: '/' },
@@ -14,7 +16,6 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const navigate = useNavigate()
   const location = useLocation()
   const progressRef = useScrollProgress()
   const isHome = location.pathname === '/'
@@ -66,8 +67,8 @@ export default function Navbar() {
           }
         >
           {/* Logo */}
-          <button
-            onClick={() => navigate('/')}
+          <Link
+            to="/"
             className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-lg cursor-pointer"
             aria-label="Ir al inicio"
           >
@@ -78,7 +79,7 @@ export default function Navbar() {
             >
               OpticaMilap
             </span>
-          </button>
+          </Link>
 
           {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-1">
@@ -107,8 +108,8 @@ export default function Navbar() {
 
           {/* CTA button */}
           <div className="hidden md:block">
-            <motion.button
-              onClick={() => navigate('/citas')}
+            <MotionLink
+              to="/citas"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -129,7 +130,7 @@ export default function Navbar() {
             >
               Agendar Cita
               <FiArrowRight size={13} />
-            </motion.button>
+            </MotionLink>
           </div>
 
           {/* Mobile hamburger */}
@@ -182,12 +183,13 @@ export default function Navbar() {
                   </li>
                 ))}
                 <li className="pt-2 pb-1 px-1">
-                  <button
-                    onClick={() => { setOpen(false); navigate('/citas') }}
+                  <Link
+                    to="/citas"
+                    onClick={() => setOpen(false)}
                     className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-accent text-white text-sm font-semibold cursor-pointer hover:bg-[#025d8f] transition-colors"
                   >
                     Agendar Cita <FiArrowRight size={14} />
-                  </button>
+                  </Link>
                 </li>
               </ul>
             </motion.div>

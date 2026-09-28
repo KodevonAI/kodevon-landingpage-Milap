@@ -4,7 +4,7 @@ export const BUSINESS = {
   phone: '316 6085291',
   phoneRaw: '3166085291',
   email: 'optica_milap@hotmail.com',
-  website: 'http://www.opticamilap.com/',
+  website: 'https://www.opticamilap.com/',
   instagram: 'https://www.instagram.com/opticamilap/',
   whatsapp: 'https://wa.me/573166085291',
   location: { lat: 2.4448, lng: -76.6142 },

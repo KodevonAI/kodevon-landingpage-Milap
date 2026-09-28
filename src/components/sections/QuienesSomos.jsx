@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { FiAward, FiZap, FiHeart, FiArrowRight } from 'react-icons/fi'
 import { motion } from 'framer-motion'
 import ScrollReveal from '../animations/ScrollReveal'
@@ -18,7 +17,6 @@ const stats = [
 ]
 
 export default function QuienesSomos() {
-  const navigate = useNavigate()
   const counterRef = useCounterAnimation()
 
   return (
@@ -143,7 +141,7 @@ export default function QuienesSomos() {
                 ))}
               </div>
 
-              <Button onClick={() => navigate('/citas')}>
+              <Button to="/citas">
                 Agenda tu Cita
                 <FiArrowRight size={15} />
               </Button>

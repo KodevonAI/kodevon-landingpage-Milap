@@ -1,11 +1,12 @@
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiArrowRight, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { BUSINESS } from '../../utils/constants'
 
+const MotionLink = motion.create(Link)
+
 export default function CTABanner() {
-  const navigate = useNavigate()
 
   return (
     <section className="py-6 px-4 sm:px-6 lg:px-8">
@@ -50,8 +51,8 @@ export default function CTABanner() {
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3 shrink-0">
-              <motion.button
-                onClick={() => navigate('/citas')}
+              <MotionLink
+                to="/citas"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold cursor-pointer whitespace-nowrap shadow-lg transition-colors duration-150 hover:bg-blue-50"
@@ -59,7 +60,7 @@ export default function CTABanner() {
               >
                 Agenda tu Cita
                 <FiArrowRight size={16} />
-              </motion.button>
+              </MotionLink>
               <div className="flex gap-3">
                 <a
                   href={BUSINESS.whatsapp}

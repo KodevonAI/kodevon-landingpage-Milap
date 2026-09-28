@@ -26,7 +26,8 @@ function isValidDate(dateStr) {
   return getDay(d) !== 0
 }
 
-export default function ReservaCitas() {
+export default function ReservaCitas({ titleAs = 'h2' }) {
+  const Title = titleAs
   const [availableHours, setAvailableHours] = useState([])
   const [loadingHours, setLoadingHours] = useState(false)
   const [toast, setToast] = useState({ message: '', type: 'success' })
@@ -72,11 +73,11 @@ export default function ReservaCitas() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up" className="text-center mb-12">
           <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Reserva Online</p>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-dark mb-4">
+          <Title className="font-display text-3xl sm:text-4xl font-bold text-dark mb-4">
             Agenda tu cita
             <br />
             <span className="text-primary">en línea</span>
-          </h2>
+          </Title>
           <p className="text-gray-500 text-sm">
             Selecciona servicio, fecha y hora. Recibirás confirmación por email. Citas de 30 min.
           </p>

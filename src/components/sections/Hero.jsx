@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
 import { FiArrowRight, FiStar, FiClock, FiAward } from 'react-icons/fi'
 import Button from '../common/Button'
 import { useMagneticEffect } from '../../hooks/useGSAPAnimations'
@@ -109,7 +108,6 @@ function EyeVisual() {
 }
 
 export default function Hero() {
-  const navigate = useNavigate()
   const magnetRef = useMagneticEffect(0.4)
 
   return (
@@ -123,7 +121,7 @@ export default function Hero() {
           {/* Left: text */}
           <div>
             {/* Badge */}
-            <motion.div
+            <motion.h1
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -131,10 +129,10 @@ export default function Hero() {
               style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', color: '#7DD3FC' }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8] animate-pulse" />
-              Óptica Profesional · Popayán, Cauca
-            </motion.div>
+              Óptica Profesional en Popayán, Cauca
+            </motion.h1>
 
-            <motion.h1
+            <motion.p
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
@@ -148,7 +146,7 @@ export default function Hero() {
               >
                 Nuestra Pasión
               </span>
-            </motion.h1>
+            </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -168,7 +166,7 @@ export default function Hero() {
               className="flex flex-col sm:flex-row gap-3"
             >
               <div ref={magnetRef} className="inline-block">
-                <Button onClick={() => navigate('/citas')} size="lg">
+                <Button to="/citas" size="lg">
                   Agenda tu Cita
                   <FiArrowRight size={16} />
                 </Button>

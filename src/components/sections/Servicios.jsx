@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiEye, FiCircle, FiTool, FiX, FiClock, FiCheck, FiArrowRight } from 'react-icons/fi'
 import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
@@ -90,9 +89,9 @@ function ServiceCard({ service, index, onClick }) {
   )
 }
 
-export default function Servicios() {
+export default function Servicios({ titleAs = 'h2' }) {
+  const Title = titleAs
   const [selected, setSelected] = useState(null)
-  const navigate = useNavigate()
   const gridRef = useStaggerAnimation({ stagger: 0.1 })
 
   return (
@@ -100,7 +99,7 @@ export default function Servicios() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up" className="text-center mb-14">
           <span className="inline-block text-accent font-semibold text-xs tracking-widest uppercase mb-3 bg-accent-muted px-3 py-1 rounded-full">Nuestros Servicios</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-3">
+          <Title className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-3">
             Todo lo que necesitas para
             <br />
             <span
@@ -109,7 +108,7 @@ export default function Servicios() {
             >
               tu salud visual
             </span>
-          </h2>
+          </Title>
         </ScrollReveal>
 
         {/* Bento grid: first card is 2-wide featured, rest are 1x1 */}
@@ -171,7 +170,8 @@ export default function Servicios() {
               </ul>
               <Button
                 className="w-full justify-center"
-                onClick={() => { setSelected(null); navigate('/citas') }}
+                to="/citas"
+                onClick={() => setSelected(null)}
               >
                 Agendar Cita
                 <FiArrowRight size={15} />
