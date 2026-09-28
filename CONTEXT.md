@@ -36,13 +36,6 @@
 | @tailwindcss/vite | 4.x | Plugin de Vite para Tailwind v4 |
 | Framer Motion | 12.x | Animaciones de página y scroll reveals |
 | GSAP + @gsap/react | 3.x | Stagger animations con ScrollTrigger |
-| React Hook Form | 7.x | Formularios |
-| @hookform/resolvers | 5.x | Integración Zod + RHF |
-| Zod | 4.x | Validación de schemas |
-| @react-google-maps/api | 2.x | Google Maps embed |
-| @emailjs/browser | 4.x | Envío de emails sin backend |
-| date-fns + date-fns-tz | 4.x / 3.x | Manipulación de fechas, timezone Colombia |
-| axios | 1.x | HTTP (usado junto con fetch nativo) |
 | react-icons | 5.x | Iconos (fi = Feather, fa = Font Awesome) |
 
 ---
@@ -89,7 +82,8 @@ opticamilap-web/
 ├── index.html                        # lang="es", meta SEO, OG tags
 ├── package.json
 ├── vite.config.js
-├── .env.local                        # API keys (NO commitear)
+├── scripts/prerender.js              # HTML estático por ruta + sitemap.xml (corre en npm run build)
+├── public/_headers                   # Headers y caché para Cloudflare Pages
 │
 └── src/
     ├── index.css                     # Tailwind v4 @theme, Google Fonts
@@ -111,14 +105,13 @@ opticamilap-web/
     │   │   ├── Servicios.jsx         # 3. 4 servicios, cards bg-primary
     │   │   ├── PorqueElegir.jsx      # 4. 6 razones, icon boxes bg-primary
     │   │   ├── Testimonios.jsx       # 5. Carrusel, card bg-primary
-    │   │   ├── ReservaCitas.jsx      # 6. Formulario cita + Google Calendar
+    │   │   ├── ReservaCitas.jsx      # 6. Sección citas (usa CitaForm → WhatsApp)
     │   │   ├── FAQ.jsx               # 7. Accordion preguntas frecuentes
-    │   │   ├── FormContacto.jsx      # 8. Formulario contacto + canales
-    │   │   └── Ubicacion.jsx         # 9. Google Maps + horario
+    │   │   ├── FormContacto.jsx      # 8. Canales + ContactForm → WhatsApp
+    │   │   └── Ubicacion.jsx         # 9. Google Maps (iframe, sin API key) + horario
     │   │
     │   ├── common/
     │   │   ├── Button.jsx            # Variantes: primary, secondary, outline
-    │   │   ├── Toast.jsx             # Notificaciones success/error
     │   │   └── Spinner.jsx           # Loading spinner
     │   │
     │   └── animations/
@@ -131,30 +124,17 @@ opticamilap-web/
     │
     ├── utils/
     │   ├── constants.js              # BUSINESS, SCHEDULE, SERVICES, TESTIMONIOS, FAQS, COLORS
-    │   ├── googleCalendar.js         # getAvailableHours(), createCitaEvent()
-    │   ├── emailService.js           # sendContactForm(), sendCitaConfirmation()
-    │   └── validation.js             # citaSchema, contactSchema (Zod)
+    │   └── whatsapp.js               # openWhatsApp(): abre wa.me con mensaje armado
     │
-    └── config/
-        ├── googleConfig.js           # googleCalendarConfig, googleMapsConfig
-        └── emailjsConfig.js          # emailjs service/template IDs
+    └── seo/
+        └── routes.js                 # title/description/canonical por ruta + JSON-LD
 ```
 
 ---
 
-## Variables de Entorno (`.env.local`)
+## Variables de Entorno
 
-Estas variables deben existir localmente para que las integraciones funcionen. **No están en el repositorio.**
-
-```env
-VITE_GOOGLE_MAPS_API_KEY=...
-VITE_GOOGLE_CALENDAR_API_KEY=...
-VITE_CALENDAR_ID=...
-VITE_EMAILJS_SERVICE_ID=...
-VITE_EMAILJS_TEMPLATE_ID_CITA=...
-VITE_EMAILJS_TEMPLATE_ID_CONTACT=...
-VITE_EMAILJS_PUBLIC_KEY=...
-```
+No se necesitan. Mapa y formularios funcionan sin API keys.
 
 ---
 
@@ -218,18 +198,14 @@ VITE_EMAILJS_PUBLIC_KEY=...
 
 ## Integraciones Externas
 
-### Google Calendar (REST API — client-side)
-- `getAvailableHours(date)`: GET eventos del día, filtra slots de 30 min ya ocupados
-- `createCitaEvent(citaData)`: POST evento al calendario (requiere API key con write scope)
-- Slots disponibles: 08:00–12:00 y 14:00–18:00 (L-V), 08:00–13:00 (Sáb)
-
-### EmailJS
-- Sin backend. Dos templates: confirmación de cita + formulario de contacto
-- Config en `src/config/emailjsConfig.js` (lee de `.env.local`)
+### Formularios → WhatsApp
+- Cita y contacto usan validación nativa del navegador y abren `wa.me` con el mensaje armado
+- Slots de cita: 08:00–12:00 y 14:00–18:00 (L-V), 08:00–13:00 (Sáb), cada 30 min
+- Antes usaban Google Calendar + EmailJS desde el cliente; se quitaron porque crear eventos
+  con API key no es posible (requiere OAuth/cuenta de servicio en un backend)
 
 ### Google Maps
-- Mapa embebido con marcador en la tienda
-- Config en `src/config/googleConfig.js`
+- iframe público (`google.com/maps?q=lat,lng&output=embed`), sin API key
 
 ---
 
@@ -241,15 +217,15 @@ VITE_EMAILJS_PUBLIC_KEY=...
 3. **Layout:** Navbar flotante glassmorphism + Footer oscuro
 4. **Hero:** 2 columnas + animación `AnimatedEye` con Framer Motion
 5. **Secciones:** QuienesSomos, Servicios, PorqueElegir, Testimonios, ReservaCitas, FAQ, FormContacto, Ubicacion
-6. **Formularios:** React Hook Form + Zod en citas y contacto
+6. **Formularios:** citas y contacto envían por WhatsApp
 7. **Animaciones:** ScrollReveal, GSAP stagger, Framer Motion en hero/navbar
 8. **SEO base:** `index.html` con lang, title, meta description, OG tags
 9. **Diseño visual:** fondos blancos, componentes en color corporativo `#3238A6`
 
 ### Pendiente ✗
-- [ ] Llenar `.env.local` con API keys reales (Google Calendar, Maps, EmailJS)
+- [ ] (Opcional) Reservas reales en Google Calendar vía Cloudflare Pages Function + cuenta de servicio
 - [ ] Fase 6: Optimización, Lighthouse score, lazy loading de imágenes
-- [ ] Fase 7: Deploy a Hostinger
+- [ ] Deploy: Cloudflare Pages (proyecto `opticamilap`, build `npm run build`, salida `dist`)
 - [ ] Imágenes reales del negocio (actualmente solo ilustraciones/SVG)
 - [ ] Eliminar `useRef` no utilizado en `Hero.jsx` (import sobrante, warning de TS, no afecta build)
 
@@ -262,8 +238,8 @@ VITE_EMAILJS_PUBLIC_KEY=...
 | Tailwind v4 no usa `tailwind.config.js` | Tokens en bloque `@theme` en `index.css` |
 | Google Fonts debe ir ANTES de `@import "tailwindcss"` | Orden crítico en index.css |
 | `FiGlasses` no existe en react-icons/fi v5 | SVG personalizado inline `GlassesIcon` |
-| Google Calendar write con API key | Requiere calendar público + permisos write o OAuth |
-| Formulario de cita valida domingos | `getDay() !== 0` en el validador de fecha |
+| Google Calendar write con API key | No es posible; por eso las citas van por WhatsApp |
+| Formulario de cita valida domingos | Sin horarios si `getDay() === 0` |
 | `focus:ring-2` deprecated pattern | Usar `focus-visible:ring-2` (accesibilidad) |
 | `opacity-8` / `opacity-6` no son clases Tailwind | Usar `style={{ opacity: 0.08 }}` o inline para valores no estándar |
 

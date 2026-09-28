@@ -1,18 +1,9 @@
-import { lazy } from 'react'
 import { FiMapPin, FiExternalLink } from 'react-icons/fi'
 import { BUSINESS } from '../../utils/constants'
-import Deferred from '../common/Deferred'
 import ScrollReveal from '../animations/ScrollReveal'
 
-const UbicacionMap = lazy(() => import('./UbicacionMap'))
-
-function MapPlaceholder() {
-  return (
-    <div className="w-full h-full bg-gray-50 flex items-center justify-center" aria-hidden="true">
-      <FiMapPin size={32} className="text-primary/40" />
-    </div>
-  )
-}
+// Embed público de Google Maps: no requiere API key.
+const MAP_EMBED_URL = `https://www.google.com/maps?q=${BUSINESS.location.lat},${BUSINESS.location.lng}&z=17&hl=es&output=embed`
 
 const MAP_HEIGHT = 460
 
@@ -34,9 +25,14 @@ export default function Ubicacion() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <ScrollReveal direction="left" className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-lg border border-gray-100" style={{ height: MAP_HEIGHT }}>
-              <Deferred className="h-full" fallback={<MapPlaceholder />}>
-                <UbicacionMap mapsUrl={mapsUrl} />
-              </Deferred>
+              <iframe
+                src={MAP_EMBED_URL}
+                title="Ubicación de OpticaMilap en Google Maps"
+                className="w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
             </div>
           </ScrollReveal>
 

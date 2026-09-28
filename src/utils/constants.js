@@ -87,7 +87,7 @@ export const TESTIMONIOS = [
 export const FAQS = [
   {
     question: '¿Cómo puedo agendar una cita?',
-    answer: 'Puedes agendar tu cita directamente en nuestra página web usando el formulario de reserva, o llamarnos al 316 6085291. También puedes escribirnos por WhatsApp.',
+    answer: 'Puedes agendar tu cita directamente en nuestra página web usando el formulario de reserva, que te lleva a WhatsApp con tu solicitud, o llamarnos al 316 6085291. También puedes escribirnos por WhatsApp.',
   },
   {
     question: '¿Cuál es el costo del examen visual?',

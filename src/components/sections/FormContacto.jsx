@@ -1,12 +1,8 @@
-import { lazy } from 'react'
 import { FiInstagram, FiPhone, FiMail } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { BUSINESS } from '../../utils/constants'
-import Deferred from '../common/Deferred'
-import FormSkeleton from '../common/FormSkeleton'
 import ScrollReveal from '../animations/ScrollReveal'
-
-const ContactForm = lazy(() => import('./ContactForm'))
+import ContactForm from './ContactForm'
 
 const contacts = [
   { icon: FiPhone, label: 'Teléfono', value: BUSINESS.phone, href: `tel:${BUSINESS.phoneRaw}` },
@@ -75,9 +71,7 @@ export default function FormContacto({ titleAs = 'h2' }) {
           </ScrollReveal>
 
           <ScrollReveal direction="right" delay={0.15}>
-            <Deferred fallback={<FormSkeleton height={620} />}>
-              <ContactForm />
-            </Deferred>
+            <ContactForm />
           </ScrollReveal>
         </div>
       </div>

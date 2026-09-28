@@ -1,9 +1,5 @@
-import { lazy } from 'react'
-import Deferred from '../common/Deferred'
-import FormSkeleton from '../common/FormSkeleton'
 import ScrollReveal from '../animations/ScrollReveal'
-
-const CitaForm = lazy(() => import('./CitaForm'))
+import CitaForm from './CitaForm'
 
 export default function ReservaCitas({ titleAs = 'h2' }) {
   const Title = titleAs
@@ -19,14 +15,12 @@ export default function ReservaCitas({ titleAs = 'h2' }) {
             <span className="text-primary">en línea</span>
           </Title>
           <p className="text-gray-500 text-sm">
-            Selecciona servicio, fecha y hora. Recibirás confirmación por email. Citas de 30 min.
+            Elige servicio, fecha y hora, y envíanos tu solicitud por WhatsApp. Te confirmamos la cita por ahí.
           </p>
         </ScrollReveal>
 
         <ScrollReveal direction="up" delay={0.15}>
-          <Deferred fallback={<FormSkeleton height={560} />}>
-            <CitaForm />
-          </Deferred>
+          <CitaForm />
         </ScrollReveal>
       </div>
     </section>
