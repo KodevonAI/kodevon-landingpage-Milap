@@ -25,7 +25,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <img src={logo} alt="OpticaMilap logo" className="h-9 w-auto" />
+              <img src={logo} alt="OpticaMilap logo" width={83} height={96} className="h-9 w-auto" />
               <span className="font-display font-bold text-base text-white tracking-tight">OpticaMilap</span>
             </div>
             <p className="text-sm leading-relaxed text-white/50 max-w-xs">

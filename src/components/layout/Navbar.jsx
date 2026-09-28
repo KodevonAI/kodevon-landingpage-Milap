@@ -72,7 +72,7 @@ export default function Navbar() {
             className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-lg cursor-pointer"
             aria-label="Ir al inicio"
           >
-            <img src={logo} alt="OpticaMilap logo" className="h-7 w-auto" />
+            <img src={logo} alt="OpticaMilap logo" width={83} height={96} className="h-7 w-auto" />
             <span
               className="font-display font-bold text-sm hidden sm:block tracking-tight transition-colors duration-300"
               style={{ color: onHero ? 'rgba(255,255,255,0.90)' : '#0F172A' }}

@@ -1,24 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import { MeshGradient } from '@paper-design/shaders-react'
 
+// Gradiente desenfocado: no necesita resolución retina. Limitar píxeles
+// reduce mucho el trabajo de GPU en móviles y pantallas grandes.
+const SHADER_QUALITY = { minPixelRatio: 1, maxPixelCount: 1280 * 720 }
+
 export function ShaderBackground({ children }) {
   const containerRef = useRef(null)
-  const [isActive, setIsActive] = useState(false)
+  const [animate, setAnimate] = useState(false)
 
+  // Anima solo mientras el hero está en pantalla y el usuario no pidió menos movimiento.
   useEffect(() => {
-    const handleMouseEnter = () => setIsActive(true)
-    const handleMouseLeave = () => setIsActive(false)
     const container = containerRef.current
-    if (container) {
-      container.addEventListener('mouseenter', handleMouseEnter)
-      container.addEventListener('mouseleave', handleMouseLeave)
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener('mouseenter', handleMouseEnter)
-        container.removeEventListener('mouseleave', handleMouseLeave)
-      }
-    }
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (!container || reducedMotion.matches) return
+
+    const observer = new IntersectionObserver(([entry]) => setAnimate(entry.isIntersecting))
+    observer.observe(container)
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -55,14 +54,16 @@ export function ShaderBackground({ children }) {
       <MeshGradient
         className="absolute inset-0 w-full h-full"
         colors={['#0F172A', '#0369A1', '#0EA5E9', '#1E3A5F', '#082F49']}
-        speed={0.25}
+        speed={animate ? 0.25 : 0}
+        {...SHADER_QUALITY}
         backgroundColor="#0F172A"
       />
       {/* Secondary overlay — subtle wireframe shimmer */}
       <MeshGradient
         className="absolute inset-0 w-full h-full opacity-40"
         colors={['#0F172A', '#38BDF8', '#0369A1', '#0F172A']}
-        speed={0.15}
+        speed={animate ? 0.15 : 0}
+        {...SHADER_QUALITY}
         wireframe="true"
         backgroundColor="transparent"
       />
