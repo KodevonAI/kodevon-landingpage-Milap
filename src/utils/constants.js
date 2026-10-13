@@ -7,7 +7,8 @@ export const BUSINESS = {
   website: 'https://www.opticamilap.com/',
   instagram: 'https://www.instagram.com/opticamilap/',
   whatsapp: 'https://wa.me/573166085291',
-  location: { lat: 2.4448, lng: -76.6142 },
+  location: { lat: 2.4560497, lng: -76.5982267 },
+  googleMaps: 'https://www.google.com/maps?cid=3925784338551329299',
   timezone: 'America/Bogota',
 }
 
@@ -51,37 +52,29 @@ export const SERVICES = [
   },
 ]
 
-export const TESTIMONIOS = [
-  {
-    author: 'María González',
-    rating: 5,
-    date: '2026-03-15',
-    text: 'Excelente atención, el personal es muy profesional y amable. Me realizaron el examen visual completo y quedé muy satisfecha con el resultado. ¡Totalmente recomendados!',
-  },
-  {
-    author: 'Carlos Martínez',
-    rating: 5,
-    date: '2026-02-28',
-    text: 'Muy buena atención y precios justos. Las gafas que me hicieron quedaron perfectas. El optómetra explica todo con detalle y se nota su experiencia.',
-  },
-  {
-    author: 'Ana Rodríguez',
-    rating: 5,
-    date: '2026-01-20',
-    text: 'Llevo años siendo clienta de OpticaMilap y siempre recibo un servicio de primera. Los lentes de contacto que me recomendaron son perfectos para mi trabajo.',
-  },
-  {
-    author: 'Luis Fernández',
-    rating: 5,
-    date: '2025-12-10',
-    text: 'Me repararon las gafas en menos de una hora y a muy buen precio. El trato fue excelente desde el primer momento. Los recomiendo ampliamente.',
-  },
-  {
-    author: 'Sandra López',
-    rating: 5,
-    date: '2025-11-05',
-    text: 'Agendé mi cita por la web y fue muy fácil. La atención fue puntual y el examen visual muy completo. Salí con mis gafas nuevas el mismo día.',
-  },
+// Datos reales de la ficha de Google Maps del negocio (consultados en octubre de 2026).
+// No se actualizan solos: revisar la ficha y ajustar aquí cuando cambien.
+export const GOOGLE_REVIEWS = {
+  rating: 4.3,
+  count: 12,
+  fiveStar: 10,
+  checked: 'octubre de 2026',
+  url: 'https://www.google.com/maps?cid=3925784338551329299',
+  writeUrl: 'https://search.google.com/local/writereview?placeid=ChIJFRuz1skDMI4RE9IkZA4wezY',
+}
+
+export const BRANDS = {
+  monturas: ['Ray-Ban', 'Oakley', 'Carrera', 'Silhouette', 'Guess', 'Polo'],
+  lentes: ['Essilor', 'Zeiss', 'Hoya', 'Crizal', 'Transitions', 'CooperVision'],
+  accesorios: ['Hilco', 'Casco', 'Optiplast', 'Silhouette', 'ICU', 'Croakies'],
+}
+
+// Fotos del local subidas por el negocio a su ficha de Google.
+export const PHOTOS = [
+  { src: '/fotos/fachada-optica-milap-popayan.webp', alt: 'Fachada de Óptica Milap en la Carrera 10 #17N-60, Popayán' },
+  { src: '/fotos/exhibicion-monturas-optica-milap.webp', alt: 'Exhibición de monturas en Óptica Milap, Popayán' },
+  { src: '/fotos/vitrina-gafas-optica-milap.webp', alt: 'Vitrina de gafas de sol y monturas en Óptica Milap' },
+  { src: '/fotos/sala-atencion-optica-milap.webp', alt: 'Sala de atención y asesoría de Óptica Milap' },
 ]
 
 export const FAQS = [

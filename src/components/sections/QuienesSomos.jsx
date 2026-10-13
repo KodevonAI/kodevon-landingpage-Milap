@@ -6,11 +6,11 @@ import { useCounterAnimation } from '../../hooks/useMotionEffects'
 const pillars = [
   { icon: FiAward, label: 'Profesionales Certificados', desc: 'Optómetras con amplia experiencia', accent: '#0369A1', bg: '#E0F2FE' },
   { icon: FiZap, label: 'Tecnología de Diagnóstico', desc: 'Equipos de última generación', accent: '#0F172A', bg: '#F1F5F9' },
-  { icon: FiHeart, label: 'Compromiso Familiar', desc: 'Más de 15 años cuidando familias', accent: '#0369A1', bg: '#E0F2FE' },
+  { icon: FiHeart, label: 'Compromiso Familiar', desc: 'Más de 30 años cuidando familias', accent: '#0369A1', bg: '#E0F2FE' },
 ]
 
 const stats = [
-  { value: '+15', label: 'Años', sub: 'de experiencia', counter: 15, prefix: '+', suffix: '' },
+  { value: '+30', label: 'Años', sub: 'de experiencia', counter: 30, prefix: '+', suffix: '' },
   { value: '+5K', label: 'Pacientes', sub: 'atendidos', counter: 5, prefix: '+', suffix: 'K' },
   { value: '100%', label: 'Garantía', sub: 'en productos', counter: 100, prefix: '', suffix: '%' },
 ]

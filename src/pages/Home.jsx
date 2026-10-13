@@ -1,5 +1,6 @@
 import Hero from '../components/sections/Hero'
 import QuienesSomos from '../components/sections/QuienesSomos'
+import Galeria from '../components/sections/Galeria'
 import Servicios from '../components/sections/Servicios'
 import PorqueElegir from '../components/sections/PorqueElegir'
 import Productos from '../components/sections/Productos'
@@ -14,6 +15,7 @@ export default function Home() {
     <>
       <Hero />
       <QuienesSomos />
+      <Galeria />
       <Servicios />
       <PorqueElegir />
       <Productos />

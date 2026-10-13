@@ -54,7 +54,7 @@ export default function PorqueElegir() {
             <span className="text-accent-light">OpticaMilap</span>
           </h2>
           <p className="text-white/50 text-sm mt-4 max-w-md mx-auto leading-relaxed">
-            Más de 15 años siendo la óptica de referencia en Popayán
+            Más de 30 años siendo la óptica de referencia en Popayán
           </p>
         </ScrollReveal>
 

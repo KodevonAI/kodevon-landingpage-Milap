@@ -1,5 +1,6 @@
 import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
 import ScrollReveal from '../animations/ScrollReveal'
+import { BRANDS } from '../../utils/constants'
 
 const categories = [
   {
@@ -16,7 +17,7 @@ const categories = [
     description: 'Amplio catálogo de monturas para todos los estilos y presupuestos.',
     accent: '#0369A1',
     bg: '#E0F2FE',
-    brands: ['Ray-Ban', 'Oakley', 'Carrera', 'Silhouette', 'Guess', 'Polo'],
+    brands: BRANDS.monturas,
   },
   {
     id: 'lentes',
@@ -32,7 +33,7 @@ const categories = [
     description: 'Lentes progresivos, fotocromáticos, antirreflejos y de contacto.',
     accent: '#0F172A',
     bg: '#F1F5F9',
-    brands: ['Essilor', 'Zeiss', 'Hoya', 'Crizal', 'Transitions', 'CooperVision'],
+    brands: BRANDS.lentes,
   },
   {
     id: 'accesorios',
@@ -46,7 +47,7 @@ const categories = [
     description: 'Estuches, paños microfibra, soluciones limpiadoras y cordones.',
     accent: '#0369A1',
     bg: '#E0F2FE',
-    brands: ['Hilco', 'Casco', 'Optiplast', 'Silhouette', 'ICU', 'Croakies'],
+    brands: BRANDS.accesorios,
   },
 ]
 

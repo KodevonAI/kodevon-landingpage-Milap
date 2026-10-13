@@ -1,4 +1,4 @@
-import { BUSINESS, FAQS, SERVICES } from '../utils/constants'
+import { BUSINESS, BRANDS, FAQS, GOOGLE_REVIEWS, PHOTOS, SERVICES } from '../utils/constants'
 
 export const SITE_URL = 'https://www.opticamilap.com'
 export const OG_IMAGE = `${SITE_URL}/og-image.jpg`
@@ -48,7 +48,7 @@ export const localBusinessSchema = {
   '@id': `${SITE_URL}/#business`,
   name: BUSINESS.name,
   url: `${SITE_URL}/`,
-  image: OG_IMAGE,
+  image: [OG_IMAGE, ...PHOTOS.map((photo) => `${SITE_URL}${photo.src}`)],
   logo: `${SITE_URL}/favicon.webp`,
   telephone: `+57${BUSINESS.phoneRaw}`,
   email: BUSINESS.email,
@@ -69,9 +69,9 @@ export const localBusinessSchema = {
     { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '14:00', closes: '18:00' },
     { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '08:00', closes: '13:00' },
   ],
-  sameAs: [BUSINESS.instagram],
+  sameAs: [BUSINESS.instagram, BUSINESS.googleMaps],
   areaServed: { '@type': 'City', name: 'Popayán' },
-  hasMap: `https://www.google.com/maps/search/?api=1&query=${BUSINESS.location.lat},${BUSINESS.location.lng}`,
+  hasMap: BUSINESS.googleMaps,
   currenciesAccepted: 'COP',
   knowsLanguage: 'es',
   contactPoint: {
@@ -141,12 +141,21 @@ export function llmsTxt() {
 - Teléfono y WhatsApp: +57 ${BUSINESS.phone}
 - Email: ${BUSINESS.email}
 - Instagram: ${BUSINESS.instagram}
+- Ficha en Google Maps: ${BUSINESS.googleMaps}
+- Valoración en Google: ${GOOGLE_REVIEWS.rating} de 5 con ${GOOGLE_REVIEWS.count} reseñas (${GOOGLE_REVIEWS.checked})
+- Experiencia: más de 30 años
 - Horario: lunes a viernes de 8:00 a 12:00 y de 14:00 a 18:00; sábados de 8:00 a 13:00; domingos cerrado
 - Zona horaria: ${BUSINESS.timezone}
 
 ## Servicios
 
 ${SERVICES.map((s) => `- ${s.name} (${s.duration}): ${s.description} Incluye: ${s.details.join(', ')}.`).join('\n')}
+
+## Marcas
+
+- Monturas: ${BRANDS.monturas.join(', ')}
+- Lentes: ${BRANDS.lentes.join(', ')}
+- Accesorios: ${BRANDS.accesorios.join(', ')}
 
 ## Páginas
 

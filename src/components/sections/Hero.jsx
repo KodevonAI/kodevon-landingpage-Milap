@@ -3,6 +3,9 @@ import { FiArrowRight, FiStar, FiClock, FiAward } from 'react-icons/fi'
 import Button from '../common/Button'
 import { useMagneticEffect } from '../../hooks/useMotionEffects'
 import { ShaderBackground } from '../ui/hero-shader'
+import { GOOGLE_REVIEWS } from '../../utils/constants'
+
+const RATING = GOOGLE_REVIEWS.rating.toLocaleString('es-CO')
 
 function EyeVisual() {
   return (
@@ -56,10 +59,10 @@ function EyeVisual() {
         >
           <div className="flex gap-0.5 mb-1">
             {[...Array(5)].map((_, i) => (
-              <FiStar key={i} size={10} className="text-amber-400 fill-amber-400" />
+              <FiStar key={i} size={10} className={i < Math.round(GOOGLE_REVIEWS.rating) ? 'text-amber-400 fill-amber-400' : 'text-white/30'} />
             ))}
           </div>
-          <p className="font-display font-bold text-lg text-white">4.9</p>
+          <p className="font-display font-bold text-lg text-white">{RATING}</p>
           <p className="text-white/50 text-[10px] font-medium">Google</p>
         </motion.div>
 
@@ -177,7 +180,7 @@ export default function Hero() {
             >
               {[
                 { icon: FiAward, label: 'Certificados' },
-                { icon: FiStar, label: '4.9 en Google' },
+                { icon: FiStar, label: `${RATING} en Google` },
                 { icon: FiClock, label: 'Lun–Sáb · Citas' },
               ].map(({ icon: Icon, label }, i) => (
                 <div key={label} className="flex items-center gap-2 text-sm">

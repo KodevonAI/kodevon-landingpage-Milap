@@ -29,7 +29,7 @@ export default function Footer() {
               <span className="font-display font-bold text-base text-white tracking-tight">OpticaMilap</span>
             </div>
             <p className="text-sm leading-relaxed text-white/50 max-w-xs">
-              Tu salud visual es nuestra prioridad. Atención profesional y personalizada en Popayán, Cauca, desde 2010.
+              Tu salud visual es nuestra prioridad. Atención profesional y personalizada en Popayán, Cauca, con más de 30 años de experiencia.
             </p>
             <div className="flex items-center gap-2.5 mt-5">
               <a

@@ -8,8 +8,6 @@ const MAP_EMBED_URL = `https://www.google.com/maps?q=${BUSINESS.location.lat},${
 const MAP_HEIGHT = 460
 
 export default function Ubicacion() {
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(BUSINESS.address)}`
-
   return (
     <section id="ubicacion" className="py-20 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -67,7 +65,7 @@ export default function Ubicacion() {
               </div>
 
               <a
-                href={mapsUrl}
+                href={BUSINESS.googleMaps}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3.5 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
