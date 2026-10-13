@@ -100,13 +100,13 @@ export default function Servicios({ titleAs = 'h2' }) {
         <ScrollReveal direction="up" className="text-center mb-14">
           <span className="inline-block text-accent font-semibold text-xs tracking-widest uppercase mb-3 bg-accent-muted px-3 py-1 rounded-full">Nuestros Servicios</span>
           <Title className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-3">
-            Todo lo que necesitas para
+            {titleAs === 'h1' ? 'Servicios de óptica y optometría para' : 'Todo lo que necesitas para'}
             <br />
             <span
               className="text-transparent bg-clip-text"
               style={{ backgroundImage: 'linear-gradient(135deg, #0369A1, #0EA5E9)' }}
             >
-              tu salud visual
+              {titleAs === 'h1' ? 'tu salud visual en Popayán' : 'tu salud visual'}
             </span>
           </Title>
         </ScrollReveal>

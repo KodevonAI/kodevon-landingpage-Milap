@@ -10,9 +10,9 @@ export default function ReservaCitas({ titleAs = 'h2' }) {
         <ScrollReveal direction="up" className="text-center mb-12">
           <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Reserva Online</p>
           <Title className="font-display text-3xl sm:text-4xl font-bold text-dark mb-4">
-            Agenda tu cita
+            {titleAs === 'h1' ? 'Agenda tu examen visual' : 'Agenda tu cita'}
             <br />
-            <span className="text-primary">en línea</span>
+            <span className="text-primary">{titleAs === 'h1' ? 'en Popayán, en línea' : 'en línea'}</span>
           </Title>
           <p className="text-gray-500 text-sm">
             Elige servicio, fecha y hora, y envíanos tu solicitud por WhatsApp. Te confirmamos la cita por ahí.

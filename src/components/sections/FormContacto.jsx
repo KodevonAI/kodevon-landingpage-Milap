@@ -20,7 +20,7 @@ export default function FormContacto({ titleAs = 'h2' }) {
         <ScrollReveal direction="up" className="text-center mb-14">
           <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Contacto</p>
           <Title className="font-display text-3xl sm:text-4xl font-bold text-dark">
-            Hablemos,
+            {titleAs === 'h1' ? 'Contacta a OpticaMilap en Popayán' : 'Hablemos,'}
             <br />
             <span className="text-primary">¿en qué te ayudamos?</span>
           </Title>

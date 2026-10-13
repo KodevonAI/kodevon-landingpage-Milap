@@ -9,7 +9,7 @@ const dist = path.join(root, 'dist')
 const ssrDir = path.join(root, 'dist-ssr')
 
 const { render } = await import(pathToFileURL(path.join(ssrDir, 'entry-server.js')).href)
-const { ROUTES, NOT_FOUND, SITE_URL, canonicalUrl, localBusinessSchema, faqSchema } =
+const { ROUTES, NOT_FOUND, SITE_URL, canonicalUrl, localBusinessSchema, webSiteSchema, breadcrumbSchema, faqSchema, llmsTxt } =
   await import(pathToFileURL(path.join(ssrDir, 'seo.js')).href)
 
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf-8')
@@ -34,7 +34,12 @@ function headFor(pathname, meta) {
 }
 
 function page(pathname, meta, outFile) {
-  const schemas = [localBusinessSchema, ...(meta.faq ? [faqSchema] : [])]
+  const schemas = [
+    localBusinessSchema,
+    ...(pathname === '/' ? [webSiteSchema] : []),
+    ...(meta.name ? [breadcrumbSchema(pathname)] : []),
+    ...(meta.faq ? [faqSchema] : []),
+  ]
   const html = template
     .replace(/<!--seo:start-->[\s\S]*?<!--seo:end-->/, headFor(pathname, meta))
     .replace('<!--schema-->', schemas.map(jsonLd).join('\n    '))
@@ -59,5 +64,9 @@ ${Object.keys(ROUTES).map((p) => `  <url>
 `
 fs.writeFileSync(path.join(dist, 'sitemap.xml'), sitemap)
 console.log(`sitemap.xml written (${SITE_URL})`)
+
+// Resumen en texto plano para asistentes de IA (ChatGPT, Perplexity, Claude...).
+fs.writeFileSync(path.join(dist, 'llms.txt'), llmsTxt())
+console.log('llms.txt written')
 
 fs.rmSync(ssrDir, { recursive: true, force: true })

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { FiPlus, FiMinus } from 'react-icons/fi'
 import { FAQS } from '../../utils/constants'
 import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
@@ -52,20 +52,19 @@ export default function FAQ() {
                 </span>
               </button>
 
-              <AnimatePresence initial={false}>
-                {open === i && (
-                  <motion.div
-                    id={`faq-answer-${i}`}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: 'easeInOut' }}
-                    className="overflow-hidden"
-                  >
-                    <p className="px-6 pb-5 text-slate text-sm leading-relaxed">{faq.answer}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* La respuesta siempre está en el DOM (cerrada con height 0) para que
+                  buscadores y asistentes de IA la lean en el HTML pre-renderizado. */}
+              <motion.div
+                id={`faq-answer-${i}`}
+                initial={false}
+                animate={open === i ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                className="overflow-hidden"
+                style={{ height: 0 }}
+                aria-hidden={open !== i}
+              >
+                <p className="px-6 pb-5 text-slate text-sm leading-relaxed">{faq.answer}</p>
+              </motion.div>
             </div>
           ))}
         </div>

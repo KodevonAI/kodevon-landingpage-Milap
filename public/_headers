@@ -1,6 +1,7 @@
 # Cloudflare Pages: headers por ruta
 
 /*
+  Strict-Transport-Security: max-age=31536000
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
@@ -15,3 +16,6 @@
   Cache-Control: public, max-age=604800
 /favicon.*
   Cache-Control: public, max-age=604800
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
