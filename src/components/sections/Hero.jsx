@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { FiArrowRight, FiStar, FiClock, FiAward } from 'react-icons/fi'
 import Button from '../common/Button'
-import { useMagneticEffect } from '../../hooks/useGSAPAnimations'
+import { useMagneticEffect } from '../../hooks/useMotionEffects'
 import { ShaderBackground } from '../ui/hero-shader'
 
 function EyeVisual() {
@@ -121,22 +121,16 @@ export default function Hero() {
           {/* Left: text */}
           <div>
             {/* Badge */}
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold mb-6 border border-white/15"
+            <h1
+              className="hero-in inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold mb-6 border border-white/15"
               style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', color: '#7DD3FC' }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8] animate-pulse" />
               Óptica Profesional en Popayán, Cauca
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-display text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-white mb-5 leading-[1.15] tracking-tight"
+            <p
+              className="hero-in [animation-delay:0.1s] font-display text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-white mb-5 leading-[1.15] tracking-tight"
             >
               Tu Visión,
               <br />
@@ -146,24 +140,19 @@ export default function Hero() {
               >
                 Nuestra Pasión
               </span>
-            </motion.p>
+            </p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.22 }}
-              className="text-base leading-relaxed mb-8 max-w-md"
+            <p
+              className="hero-in [animation-delay:0.2s] text-base leading-relaxed mb-8 max-w-md"
               style={{ color: 'rgba(255,255,255,0.65)' }}
             >
-              Exámenes visuales, gafas y lentes de contacto con tecnología
-              moderna y más de 30 años cuidando tu salud visual en Popayán.
-            </motion.p>
+              OpticaMilap es tu óptica en Popayán: exámenes visuales, gafas, lentes de
+              contacto y reparación de monturas, con tecnología moderna y más de 30 años
+              cuidando tu salud visual.
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.35 }}
-              className="flex flex-col sm:flex-row gap-3"
+            <div
+              className="hero-in [animation-delay:0.3s] flex flex-col sm:flex-row gap-3"
             >
               <div ref={magnetRef} className="inline-block">
                 <Button to="/citas" size="lg">
@@ -177,7 +166,7 @@ export default function Hero() {
               >
                 Conocer Más
               </button>
-            </motion.div>
+            </div>
 
             {/* Trust strip */}
             <motion.div

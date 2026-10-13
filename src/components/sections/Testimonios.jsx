@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight, FiStar } from 'react-icons/fi'
 import { TESTIMONIOS } from '../../utils/constants'
 import ScrollReveal from '../animations/ScrollReveal'
@@ -37,8 +36,6 @@ export default function Testimonios() {
     return () => clearInterval(timer)
   }, [paused, next])
 
-  const t = sorted[current]
-
   return (
     <section id="testimonios" className="py-24 bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,36 +58,39 @@ export default function Testimonios() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-              className="bg-card rounded-3xl p-8 sm:p-10 shadow-sm border border-border"
-            >
-              {/* Quote mark */}
-              <div className="font-display text-6xl text-accent/15 font-bold leading-none mb-2 select-none">"</div>
+          {/* Todos los testimonios están en el DOM (apilados en la misma celda) para
+              que el HTML pre-renderizado los incluya; solo el activo es visible. */}
+          <div className="grid">
+            {sorted.map((item, i) => (
+              <figure
+                key={item.author}
+                aria-hidden={i !== current}
+                className={`col-start-1 row-start-1 m-0 bg-card rounded-3xl p-8 sm:p-10 shadow-sm border border-border transition-all duration-300 ease-in-out ${
+                  i === current ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'
+                }`}
+              >
+                {/* Quote mark */}
+                <div className="font-display text-6xl text-accent/15 font-bold leading-none mb-2 select-none">"</div>
 
-              <blockquote className="text-foreground text-base sm:text-lg leading-relaxed mb-7 font-sans">
-                {t.text}
-              </blockquote>
+                <blockquote className="text-foreground text-base sm:text-lg leading-relaxed mb-7 font-sans mx-0">
+                  {item.text}
+                </blockquote>
 
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div className="flex items-center gap-3">
-                  <Avatar name={t.author} />
-                  <div>
-                    <p className="font-semibold text-foreground text-sm">{t.author}</p>
-                    <p className="text-slate text-xs">
-                      {new Date(t.date).toLocaleDateString('es-CO', { month: 'long', year: 'numeric' })}
-                    </p>
+                <figcaption className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar name={item.author} />
+                    <div>
+                      <p className="font-semibold text-foreground text-sm">{item.author}</p>
+                      <p className="text-slate text-xs">
+                        {new Date(item.date).toLocaleDateString('es-CO', { month: 'long', year: 'numeric', timeZone: 'UTC' })}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <Stars rating={t.rating} />
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                  <Stars rating={item.rating} />
+                </figcaption>
+              </figure>
+            ))}
+          </div>
 
           {/* Controls */}
           <div className="flex items-center justify-center gap-4 mt-6">

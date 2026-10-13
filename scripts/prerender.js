@@ -12,7 +12,14 @@ const { render } = await import(pathToFileURL(path.join(ssrDir, 'entry-server.js
 const { ROUTES, NOT_FOUND, SITE_URL, canonicalUrl, localBusinessSchema, webSiteSchema, breadcrumbSchema, faqSchema, llmsTxt } =
   await import(pathToFileURL(path.join(ssrDir, 'seo.js')).href)
 
+// Precarga de las fuentes latinas autoalojadas (las únicas que usa el español).
+const fontPreloads = fs.readdirSync(path.join(dist, 'assets'))
+  .filter((file) => /^(figtree|noto-sans)-latin-wght-normal.*\.woff2$/.test(file))
+  .map((file) => `<link rel="preload" href="/assets/${file}" as="font" type="font/woff2" crossorigin />`)
+  .join('\n    ')
+
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf-8')
+  .replace('<!--font-preload-->', fontPreloads)
 
 const escapeAttr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 const jsonLd = (data) =>

@@ -26,8 +26,8 @@
   --color-dark-800: #1E293B;
 
   /* Typography */
-  --font-sans: 'Noto Sans', sans-serif;
-  --font-display: 'Figtree', sans-serif;
+  --font-sans: 'Noto Sans Variable', 'Noto Sans', sans-serif;
+  --font-display: 'Figtree Variable', 'Figtree', sans-serif;
 }
 
 *, *::before, *::after {
@@ -40,7 +40,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Noto Sans Variable', 'Noto Sans', sans-serif;
   background-color: var(--color-background);
   color: var(--color-foreground);
   -webkit-font-smoothing: antialiased;
@@ -50,6 +50,21 @@ body {
 #root {
   width: 100%;
   min-height: 100vh;
+}
+
+/* Entrada del texto del hero: solo CSS, para que el HTML pre-renderizado
+   se pinte sin esperar a JS (LCP). */
+@keyframes hero-in {
+  from { opacity: 0.01; transform: translateY(16px); }
+}
+.nav-in {
+  animation: nav-in 0.5s ease-out backwards;
+}
+@keyframes nav-in {
+  from { opacity: 0.01; transform: translateY(-70px); }
+}
+.hero-in {
+  animation: hero-in 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) backwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

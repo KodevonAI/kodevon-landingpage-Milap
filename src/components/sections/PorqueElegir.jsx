@@ -1,5 +1,5 @@
 import { FiAward, FiCpu, FiHeart, FiShield, FiClock, FiMapPin } from 'react-icons/fi'
-import { useAlternatingEntrance } from '../../hooks/useGSAPAnimations'
+import { useAlternatingEntrance } from '../../hooks/useMotionEffects'
 import ScrollReveal from '../animations/ScrollReveal'
 
 const reasons = [

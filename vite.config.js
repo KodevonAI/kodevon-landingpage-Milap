@@ -7,7 +7,6 @@ import tailwindcss from '@tailwindcss/vite'
 const VENDOR_CHUNKS = {
   'vendor-react': ['react', 'react-dom', 'scheduler', 'react-router', 'react-router-dom'],
   'vendor-motion': ['framer-motion', 'motion-dom', 'motion-utils'],
-  'vendor-gsap': ['gsap', '@gsap/react'],
 }
 
 function vendorChunk(id) {

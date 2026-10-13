@@ -1,8 +1,7 @@
 import { FiAward, FiZap, FiHeart, FiArrowRight } from 'react-icons/fi'
-import { motion } from 'framer-motion'
 import ScrollReveal from '../animations/ScrollReveal'
 import Button from '../common/Button'
-import { useCounterAnimation } from '../../hooks/useGSAPAnimations'
+import { useCounterAnimation } from '../../hooks/useMotionEffects'
 
 const pillars = [
   { icon: FiAward, label: 'Profesionales Certificados', desc: 'Optómetras con amplia experiencia', accent: '#0369A1', bg: '#E0F2FE' },
@@ -118,13 +117,9 @@ export default function QuienesSomos() {
               </p>
 
               <div className="space-y-3 mb-8">
-                {pillars.map(({ icon: Icon, label, desc, accent, bg }, i) => (
-                  <motion.div
+                {pillars.map(({ icon: Icon, label, desc, accent, bg }) => (
+                  <div
                     key={label}
-                    initial={{ opacity: 0, x: 16 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: i * 0.08 }}
                     className="flex items-center gap-4 p-4 rounded-2xl border border-border hover:border-transparent hover:shadow-md transition-all duration-200 group cursor-default"
                   >
                     <div
@@ -137,7 +132,7 @@ export default function QuienesSomos() {
                       <p className="font-semibold text-foreground text-sm">{label}</p>
                       <p className="text-slate text-xs mt-0.5">{desc}</p>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
 import ScrollReveal from '../animations/ScrollReveal'
 
 const categories = [
@@ -50,13 +50,9 @@ const categories = [
   },
 ]
 
-function CategoryCard({ category, index }) {
+function CategoryCard({ category }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+    <div
       className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col"
     >
       {/* Card header */}
@@ -89,11 +85,13 @@ function CategoryCard({ category, index }) {
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
 export default function Productos() {
+  const gridRef = useStaggerAnimation({ stagger: 0.1, duration: 0.5 })
+
   return (
     <section id="productos" className="py-24 bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -116,22 +114,18 @@ export default function Productos() {
           </p>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {categories.map((cat, i) => (
-            <CategoryCard key={cat.id} category={cat} index={i} />
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {categories.map((cat) => (
+            <CategoryCard key={cat.id} category={cat} />
           ))}
         </div>
 
         {/* Bottom note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+        <p
           className="text-center text-xs text-slate-light mt-8"
         >
           Catálogo en constante actualización · Consulta disponibilidad en tienda
-        </motion.p>
+        </p>
       </div>
     </section>
   )

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import ScrollReveal from '../animations/ScrollReveal'
 import { FiArrowRight, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { BUSINESS } from '../../utils/constants'
@@ -11,11 +12,8 @@ export default function CTABanner() {
   return (
     <section className="py-6 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+        <ScrollReveal duration={0.6}>
+        <div
           className="relative rounded-3xl overflow-hidden"
           style={{ background: 'linear-gradient(135deg, #0F172A 0%, #0369A1 60%, #0EA5E9 100%)' }}
         >
@@ -82,7 +80,8 @@ export default function CTABanner() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
+        </ScrollReveal>
       </div>
     </section>
   )

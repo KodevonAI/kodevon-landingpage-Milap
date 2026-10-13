@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiMenu, FiX, FiArrowRight } from 'react-icons/fi'
 import logo from '../../assets/logo.webp'
-import { useScrollProgress } from '../../hooks/useGSAPAnimations'
+import { useScrollProgress } from '../../hooks/useMotionEffects'
 
 const MotionLink = motion.create(Link)
 
@@ -40,11 +40,8 @@ export default function Navbar() {
         }}
       />
 
-      <motion.header
-        initial={{ y: -70, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="fixed top-0 left-0 right-0 z-50 px-5 pt-4"
+      <header
+        className="nav-in fixed top-0 left-0 right-0 z-50 px-5 pt-4"
       >
         <nav
           className="max-w-5xl mx-auto rounded-2xl px-5 h-13 flex items-center justify-between transition-all duration-400"
@@ -195,7 +192,7 @@ export default function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </header>
     </>
   )
 }
