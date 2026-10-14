@@ -56,7 +56,6 @@ export function ShaderBackground({ children }) {
         colors={['#0F172A', '#0369A1', '#0EA5E9', '#1E3A5F', '#082F49']}
         speed={animate ? 0.25 : 0}
         {...SHADER_QUALITY}
-        backgroundColor="#0F172A"
       />
       {/* Secondary overlay — subtle wireframe shimmer */}
       <MeshGradient
@@ -64,8 +63,6 @@ export function ShaderBackground({ children }) {
         colors={['#0F172A', '#38BDF8', '#0369A1', '#0F172A']}
         speed={animate ? 0.15 : 0}
         {...SHADER_QUALITY}
-        wireframe="true"
-        backgroundColor="transparent"
       />
 
       {children}
