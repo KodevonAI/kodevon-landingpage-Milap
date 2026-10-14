@@ -9,7 +9,7 @@ const dist = path.join(root, 'dist')
 const ssrDir = path.join(root, 'dist-ssr')
 
 const { render } = await import(pathToFileURL(path.join(ssrDir, 'entry-server.js')).href)
-const { ROUTES, NOT_FOUND, SITE_URL, canonicalUrl, localBusinessSchema, webSiteSchema, breadcrumbSchema, faqSchema, llmsTxt } =
+const { ROUTES, NOT_FOUND, SITE_URL, canonicalUrl, schemasFor, llmsTxt } =
   await import(pathToFileURL(path.join(ssrDir, 'seo.js')).href)
 
 // Precarga de las fuentes latinas autoalojadas (las únicas que usa el español).
@@ -41,16 +41,11 @@ function headFor(pathname, meta) {
 }
 
 function page(pathname, meta, outFile) {
-  const schemas = [
-    localBusinessSchema,
-    ...(pathname === '/' ? [webSiteSchema] : []),
-    ...(meta.name ? [breadcrumbSchema(pathname)] : []),
-    ...(meta.faq ? [faqSchema] : []),
-  ]
   const html = template
     .replace(/<!--seo:start-->[\s\S]*?<!--seo:end-->/, headFor(pathname, meta))
-    .replace('<!--schema-->', schemas.map(jsonLd).join('\n    '))
+    .replace('<!--schema-->', schemasFor(pathname).map(jsonLd).join('\n    '))
     .replace('<!--app-html-->', render(pathname))
+  fs.mkdirSync(path.dirname(path.join(dist, outFile)), { recursive: true })
   fs.writeFileSync(path.join(dist, outFile), html)
   console.log(`prerendered ${pathname} -> ${outFile}`)
 }

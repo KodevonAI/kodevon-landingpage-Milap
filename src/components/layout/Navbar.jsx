@@ -1,21 +1,55 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiMenu, FiX, FiArrowRight } from 'react-icons/fi'
+import { FiMenu, FiX, FiArrowRight, FiChevronDown } from 'react-icons/fi'
 import logo from '../../assets/logo.webp'
 import { useScrollProgress } from '../../hooks/useMotionEffects'
+import { SERVICIOS } from '../../content/servicios'
 
 const MotionLink = motion.create(Link)
 
 const links = [
-  { label: 'Inicio', to: '/' },
-  { label: 'Servicios', to: '/servicios' },
+  {
+    label: 'Servicios',
+    to: '/servicios',
+    hijos: SERVICIOS.map((servicio) => ({ label: servicio.nombre, to: `/servicios/${servicio.slug}` })),
+  },
+  { label: 'Guías', to: '/guias' },
+  { label: 'Nosotros', to: '/nosotros' },
   { label: 'Contacto', to: '/contacto' },
 ]
+
+const desktopLink = (isActive, onHero) =>
+  `block px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer ${
+    isActive
+      ? onHero
+        ? 'text-white font-semibold bg-white/15'
+        : 'text-accent font-semibold bg-accent/8'
+      : onHero
+        ? 'text-white/65 hover:text-white hover:bg-white/10'
+        : 'text-slate hover:text-foreground hover:bg-muted'
+  }`
+
+const mobileLink = (isActive, onHero) =>
+  `block w-full text-left px-4 py-3 rounded-xl font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+    isActive
+      ? 'text-accent bg-accent/10 font-semibold'
+      : onHero
+        ? 'text-white/75 hover:text-white hover:bg-white/10'
+        : 'text-foreground hover:bg-muted hover:text-accent'
+  }`
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [submenu, setSubmenu] = useState(false)
+
+  // Al navegar se cierran los menús; el blur suelta el :focus-within que mantiene abierto el desplegable.
+  const cerrar = () => {
+    setOpen(false)
+    setSubmenu(false)
+    document.activeElement?.blur()
+  }
   const location = useLocation()
   const progressRef = useScrollProgress()
   const isHome = location.pathname === '/'
@@ -80,25 +114,55 @@ export default function Navbar() {
 
           {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-1">
-            {links.map(({ label, to }) => (
-              <li key={to}>
-                <NavLink
-                  to={to}
-                  end={to === '/'}
-                  className={({ isActive }) =>
-                    `px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer ${
-                      isActive
-                        ? onHero
-                          ? 'text-white font-semibold bg-white/15'
-                          : 'text-accent font-semibold bg-accent/8'
-                        : onHero
-                          ? 'text-white/65 hover:text-white hover:bg-white/10'
-                          : 'text-slate hover:text-foreground hover:bg-muted'
-                    }`
-                  }
-                >
-                  {label}
-                </NavLink>
+            {links.map(({ label, to, hijos }) => (
+              <li key={to} className="relative group">
+                <span className="flex items-center">
+                  <NavLink to={to} onClick={cerrar} className={({ isActive }) => desktopLink(isActive, onHero)}>
+                    {label}
+                  </NavLink>
+                  {hijos && (
+                    <button
+                      type="button"
+                      onClick={() => setSubmenu(!submenu)}
+                      aria-expanded={submenu}
+                      aria-controls="submenu-servicios"
+                      aria-label="Mostrar servicios"
+                      className="-ml-2 p-1 rounded-md cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      style={{ color: onHero ? 'rgba(255,255,255,0.65)' : '#64748B' }}
+                    >
+                      <FiChevronDown size={14} className={`transition-transform ${submenu ? 'rotate-180' : 'group-hover:rotate-180'}`} />
+                    </button>
+                  )}
+                </span>
+                {/* Siempre en el HTML (para buscadores y lectores sin JS); se muestra con hover, foco o clic. */}
+                {hijos && (
+                  <ul
+                    id="submenu-servicios"
+                    className={`absolute left-0 top-full pt-3 w-60 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 ${
+                      submenu ? 'visible opacity-100' : 'invisible opacity-0'
+                    }`}
+                  >
+                    <li className="bg-white rounded-2xl border border-border shadow-xl p-2">
+                      <ul>
+                        {hijos.map((hijo) => (
+                          <li key={hijo.to}>
+                            <NavLink
+                              to={hijo.to}
+                              onClick={cerrar}
+                              className={({ isActive }) =>
+                                `block px-4 py-2.5 rounded-xl text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                                  isActive ? 'text-accent bg-accent/8 font-semibold' : 'text-foreground hover:bg-muted hover:text-accent'
+                                }`
+                              }
+                            >
+                              {hijo.label}
+                            </NavLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
@@ -159,30 +223,28 @@ export default function Navbar() {
               }}
             >
               <ul className="px-3 py-3 space-y-0.5">
-                {links.map(({ label, to }) => (
+                {links.map(({ label, to, hijos }) => (
                   <li key={to}>
-                    <NavLink
-                      to={to}
-                      end={to === '/'}
-                      onClick={() => setOpen(false)}
-                      className={({ isActive }) =>
-                        `block w-full text-left px-4 py-3 rounded-xl font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                          isActive
-                            ? 'text-accent bg-accent/10 font-semibold'
-                            : onHero
-                              ? 'text-white/75 hover:text-white hover:bg-white/10'
-                              : 'text-foreground hover:bg-muted hover:text-accent'
-                        }`
-                      }
-                    >
+                    <NavLink to={to} onClick={cerrar} className={({ isActive }) => mobileLink(isActive, onHero)}>
                       {label}
                     </NavLink>
+                    {hijos && (
+                      <ul className="pl-4">
+                        {hijos.map((hijo) => (
+                          <li key={hijo.to}>
+                            <NavLink to={hijo.to} onClick={cerrar} className={({ isActive }) => `${mobileLink(isActive, onHero)} text-sm py-2.5`}>
+                              {hijo.label}
+                            </NavLink>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 ))}
                 <li className="pt-2 pb-1 px-1">
                   <Link
                     to="/citas"
-                    onClick={() => setOpen(false)}
+                    onClick={cerrar}
                     className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-accent text-white text-sm font-semibold cursor-pointer hover:bg-[#025d8f] transition-colors"
                   >
                     Agendar Cita <FiArrowRight size={14} />

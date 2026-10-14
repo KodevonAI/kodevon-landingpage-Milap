@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { FaWhatsapp } from 'react-icons/fa'
 import { SCHEDULE } from '../../content/site'
-import { SERVICIOS } from '../../content/servicios'
+import { SERVICIOS, servicioDesdeQuery } from '../../content/servicios'
 import { openWhatsApp } from '../../utils/whatsapp'
 import Button from '../common/Button'
 
@@ -38,6 +39,11 @@ function getSlots(dateStr) {
 export default function CitaForm() {
   const [minDate, setMinDate] = useState('')
   const [date, setDate] = useState('')
+  // null = la persona aún no eligió; se usa el servicio de /citas?servicio=<citaId>, si lo hay.
+  const [elegido, setElegido] = useState(null)
+  const { search } = useLocation()
+  const citaId = servicioDesdeQuery(search)
+  const service = elegido ?? SERVICIOS.find((s) => s.citaId === citaId)?.nombre ?? ''
   const slots = getSlots(date)
   const isSunday = date && slots.length === 0
 
@@ -68,7 +74,7 @@ export default function CitaForm() {
         </div>
         <div>
           <label htmlFor="cita-service" className="block text-sm font-semibold text-gray-700 mb-2">Servicio *</label>
-          <select id="cita-service" name="service" required className={inputClass} defaultValue="">
+          <select id="cita-service" name="service" required className={inputClass} value={service} onChange={(e) => setElegido(e.target.value)}>
             <option value="" disabled>Selecciona un servicio</option>
             {SERVICIOS.map((s) => (
               <option key={s.citaId} value={s.nombre}>{s.nombre}</option>

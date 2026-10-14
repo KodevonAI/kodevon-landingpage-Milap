@@ -2,13 +2,30 @@ import { Link } from 'react-router-dom'
 import { FiInstagram, FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { BUSINESS } from '../../content/site'
+import { SERVICIOS } from '../../content/servicios'
+import { GUIAS } from '../../content/guias'
 import logo from '../../assets/logo.webp'
 
-const quickLinks = [
-  { label: 'Inicio', to: '/' },
-  { label: 'Servicios', to: '/servicios' },
-  { label: 'Agendar Cita', to: '/citas' },
-  { label: 'Contacto', to: '/contacto' },
+const columnas = [
+  {
+    titulo: 'Servicios',
+    to: '/servicios',
+    enlaces: SERVICIOS.map((servicio) => ({ label: servicio.nombre, to: `/servicios/${servicio.slug}` })),
+  },
+  {
+    titulo: 'Guías',
+    to: '/guias',
+    enlaces: GUIAS.map((guia) => ({ label: guia.h1, to: `/guias/${guia.slug}` })),
+  },
+  {
+    titulo: 'OpticaMilap',
+    enlaces: [
+      { label: 'Nosotros', to: '/nosotros' },
+      { label: 'Preguntas frecuentes', to: '/preguntas-frecuentes' },
+      { label: 'Agendar cita', to: '/citas' },
+      { label: 'Contacto', to: '/contacto' },
+    ],
+  },
 ]
 
 export default function Footer() {
@@ -20,10 +37,10 @@ export default function Footer() {
       <div className="h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-40" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
 
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
               <img src={logo} alt="OpticaMilap logo" width={83} height={96} className="h-9 w-auto" />
               <span className="font-display font-bold text-base text-white tracking-tight">OpticaMilap</span>
@@ -53,19 +70,23 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick links */}
-          <div>
-            <h3 className="text-white font-semibold text-sm mb-4 font-display">Navegación</h3>
-            <ul className="space-y-2.5">
-              {quickLinks.map(({ label, to }) => (
-                <li key={to}>
-                  <Link to={to} className="text-sm text-white/50 hover:text-accent-light transition-colors duration-150">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Enlaces a todas las páginas */}
+          {columnas.map(({ titulo, to, enlaces }) => (
+            <div key={titulo}>
+              <h3 className="text-white font-semibold text-sm mb-4 font-display">
+                {to ? <Link to={to} className="hover:text-accent-light transition-colors duration-150">{titulo}</Link> : titulo}
+              </h3>
+              <ul className="space-y-2.5">
+                {enlaces.map((enlace) => (
+                  <li key={enlace.to}>
+                    <Link to={enlace.to} className="text-sm text-white/50 hover:text-accent-light transition-colors duration-150 leading-snug block">
+                      {enlace.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
           {/* Contact */}
           <div>

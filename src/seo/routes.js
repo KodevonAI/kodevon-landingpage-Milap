@@ -1,34 +1,79 @@
 import { SITE_URL, BUSINESS, BRANDS, GOOGLE_REVIEWS, PHOTOS } from '../content/site.js'
-import { SERVICIOS } from '../content/servicios.js'
+import { SERVICIOS, getServicio } from '../content/servicios.js'
+import { GUIAS, getGuia } from '../content/guias.js'
 import { FAQS_GENERALES } from '../content/faqs.js'
-
-const FAQS = FAQS_GENERALES.flatMap((tema) => tema.preguntas)
 
 export { SITE_URL }
 export const OG_IMAGE = `${SITE_URL}/og-image.jpg`
 
-// Metadatos por ruta. Los usa <Seo /> en el cliente y scripts/prerender.js en el build.
+const BUSINESS_ID = `${SITE_URL}/#business`
+
+// Mapa de rutas del sitio. Las páginas de servicio y de guía salen de src/content;
+// lo usan React Router, <Seo />, scripts/prerender.js, el sitemap y llms.txt.
 export const ROUTES = {
   '/': {
+    tipo: 'home',
+    nombre: 'Inicio',
     title: 'Óptica en Popayán | Exámenes Visuales y Gafas — OpticaMilap',
     description: 'Óptica en Popayán con más de 30 años de experiencia: exámenes visuales, gafas, lentes de contacto y reparaciones. Agenda tu cita online. Tel: 316 6085291.',
-    faq: true,
   },
   '/servicios': {
-    name: 'Servicios',
+    tipo: 'indice',
+    nombre: 'Servicios',
+    parent: '/',
     title: 'Servicios de Optometría en Popayán — OpticaMilap',
     description: 'Exámenes visuales completos, venta de gafas, lentes de contacto y reparación de monturas en Popayán, Cauca. Conoce nuestros servicios y tiempos de atención.',
   },
+  ...Object.fromEntries(SERVICIOS.map((servicio) => [`/servicios/${servicio.slug}`, {
+    tipo: 'servicio',
+    nombre: servicio.nombre,
+    parent: '/servicios',
+    slug: servicio.slug,
+    title: servicio.title,
+    description: servicio.description,
+  }])),
+  '/guias': {
+    tipo: 'indice',
+    nombre: 'Guías',
+    parent: '/',
+    title: 'Guías de Salud Visual — OpticaMilap Popayán',
+    description: 'Guías claras sobre salud visual: cada cuánto revisarte, gafas o lentes de contacto, lentes progresivos y cuidado de tus gafas. Por OpticaMilap.',
+  },
+  ...Object.fromEntries(GUIAS.map((guia) => [`/guias/${guia.slug}`, {
+    tipo: 'guia',
+    nombre: guia.h1,
+    parent: '/guias',
+    slug: guia.slug,
+    title: guia.title,
+    description: guia.description,
+  }])),
+  '/nosotros': {
+    tipo: 'pagina',
+    nombre: 'Nosotros',
+    parent: '/',
+    title: 'Sobre OpticaMilap | Óptica en Popayán con +30 Años',
+    description: 'Conoce OpticaMilap: más de 30 años cuidando la salud visual en Popayán. Nuestra sede en Antonio Nariño, las marcas que manejamos y cómo trabajamos.',
+  },
+  '/preguntas-frecuentes': {
+    tipo: 'pagina',
+    nombre: 'Preguntas frecuentes',
+    parent: '/',
+    title: 'Preguntas Frecuentes — OpticaMilap Popayán',
+    description: 'Respuestas a las preguntas más comunes sobre OpticaMilap: citas, duración del examen visual, reparaciones, medios de pago, horario y contacto.',
+  },
   '/citas': {
-    name: 'Agendar cita',
+    tipo: 'pagina',
+    nombre: 'Agendar cita',
+    parent: '/',
     title: 'Agenda tu Examen Visual en Popayán — OpticaMilap',
     description: 'Reserva online tu cita de examen visual, adaptación de lentes de contacto o asesoría de gafas en OpticaMilap, Popayán. Elige fecha y hora en minutos.',
   },
   '/contacto': {
-    name: 'Contacto',
+    tipo: 'pagina',
+    nombre: 'Contacto',
+    parent: '/',
     title: 'Contacto y Ubicación — OpticaMilap Popayán',
     description: 'Visítanos en Cra. 10 #17N-60 Local 1, Antonio Nariño, Popayán. Llámanos al 316 6085291, escríbenos por WhatsApp o envíanos un mensaje.',
-    faq: true,
   },
 }
 
@@ -38,18 +83,38 @@ export const NOT_FOUND = {
   noindex: true,
 }
 
+const normalizar = (pathname) => (pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname)
+
 export function getRouteMeta(pathname) {
-  return ROUTES[pathname] ?? NOT_FOUND
+  return ROUTES[normalizar(pathname)] ?? NOT_FOUND
 }
 
 export function canonicalUrl(pathname) {
-  return pathname === '/' ? `${SITE_URL}/` : `${SITE_URL}${pathname}`
+  const path = normalizar(pathname)
+  return path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`
 }
+
+// Camino desde Inicio hasta la página; vacío en la home y en rutas desconocidas.
+export function breadcrumbsFor(pathname) {
+  const path = normalizar(pathname)
+  if (path === '/' || !ROUTES[path]) return []
+  const migas = []
+  for (let actual = path; actual; actual = ROUTES[actual].parent) {
+    migas.unshift({ nombre: ROUTES[actual].nombre, path: actual })
+  }
+  return migas
+}
+
+const horario = [
+  { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '08:00', closes: '12:00' },
+  { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '14:00', closes: '18:00' },
+  { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '08:00', closes: '13:00' },
+]
 
 export const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'Optician',
-  '@id': `${SITE_URL}/#business`,
+  '@id': BUSINESS_ID,
   name: BUSINESS.name,
   url: `${SITE_URL}/`,
   image: [OG_IMAGE, ...PHOTOS.map((photo) => `${SITE_URL}${photo.src}`)],
@@ -68,11 +133,7 @@ export const localBusinessSchema = {
     latitude: BUSINESS.location.lat,
     longitude: BUSINESS.location.lng,
   },
-  openingHoursSpecification: [
-    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '08:00', closes: '12:00' },
-    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '14:00', closes: '18:00' },
-    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '08:00', closes: '13:00' },
-  ],
+  openingHoursSpecification: horario,
   sameAs: [BUSINESS.instagram, BUSINESS.googleMaps],
   areaServed: { '@type': 'City', name: 'Popayán' },
   hasMap: BUSINESS.googleMaps,
@@ -93,46 +154,105 @@ export const localBusinessSchema = {
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Servicios de óptica y optometría',
-    itemListElement: SERVICIOS.map(({ nombre: name, resumen: description }) => ({
+    itemListElement: SERVICIOS.map((servicio) => ({
       '@type': 'Offer',
-      itemOffered: { '@type': 'Service', name, description, areaServed: 'Popayán' },
+      itemOffered: {
+        '@type': 'Service',
+        name: servicio.nombre,
+        description: servicio.resumen,
+        url: canonicalUrl(`/servicios/${servicio.slug}`),
+        areaServed: 'Popayán',
+      },
     })),
   },
 }
 
-export const webSiteSchema = {
+const webSiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   '@id': `${SITE_URL}/#website`,
   name: BUSINESS.name,
   url: `${SITE_URL}/`,
   inLanguage: 'es-CO',
-  publisher: { '@id': `${SITE_URL}/#business` },
+  publisher: { '@id': BUSINESS_ID },
 }
 
-export function breadcrumbSchema(pathname) {
+function breadcrumbSchema(pathname) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${SITE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: ROUTES[pathname].name, item: canonicalUrl(pathname) },
-    ],
+    itemListElement: breadcrumbsFor(pathname).map(({ nombre, path }, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: nombre,
+      item: canonicalUrl(path),
+    })),
   }
 }
 
-export const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQS.map(({ pregunta: question, respuesta: answer }) => ({
-    '@type': 'Question',
-    name: question,
-    acceptedAnswer: { '@type': 'Answer', text: answer },
-  })),
+function faqSchema(preguntas) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: preguntas.map(({ pregunta, respuesta }) => ({
+      '@type': 'Question',
+      name: pregunta,
+      acceptedAnswer: { '@type': 'Answer', text: respuesta },
+    })),
+  }
+}
+
+function serviceSchema(servicio, url) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: servicio.nombre,
+    description: servicio.resumen,
+    url,
+    provider: { '@id': BUSINESS_ID },
+    areaServed: 'Popayán',
+  }
+}
+
+function articleSchema(guia, url) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: guia.h1,
+    description: guia.description,
+    inLanguage: 'es-CO',
+    dateModified: guia.revisado,
+    author: { '@id': BUSINESS_ID },
+    publisher: { '@id': BUSINESS_ID },
+    mainEntityOfPage: url,
+  }
+}
+
+// JSON-LD de una página. Cada FAQPage lleva solo las preguntas visibles en ella.
+export function schemasFor(pathname) {
+  const path = normalizar(pathname)
+  const meta = ROUTES[path]
+  if (!meta) return [localBusinessSchema]
+  if (meta.tipo === 'home') return [localBusinessSchema, webSiteSchema]
+
+  const schemas = [localBusinessSchema, breadcrumbSchema(path)]
+  const url = canonicalUrl(path)
+  if (meta.tipo === 'servicio') {
+    const servicio = getServicio(meta.slug)
+    schemas.push(serviceSchema(servicio, url), faqSchema(servicio.faqs))
+  }
+  if (meta.tipo === 'guia') schemas.push(articleSchema(getGuia(meta.slug), url))
+  if (path === '/preguntas-frecuentes') {
+    schemas.push(faqSchema(FAQS_GENERALES.flatMap((tema) => tema.preguntas)))
+  }
+  return schemas
 }
 
 // Contenido de /llms.txt: datos del negocio en Markdown plano para motores de IA.
 export function llmsTxt() {
+  const enlace = (path, texto) => `- [${ROUTES[path].nombre}](${canonicalUrl(path)}): ${texto}`
+  const paginas = Object.entries(ROUTES).filter(([, meta]) => meta.tipo !== 'servicio' && meta.tipo !== 'guia')
+
   return `# ${BUSINESS.name}
 
 > Óptica en Popayán, Cauca (Colombia): exámenes visuales, venta de gafas, lentes de contacto y reparación de monturas. Las citas se agendan en línea y se confirman por WhatsApp.
@@ -153,7 +273,7 @@ export function llmsTxt() {
 
 ## Servicios
 
-${SERVICIOS.map((s) => `- ${s.nombre} (${s.duracion}): ${s.resumen} Incluye: ${s.incluye.join(', ')}.`).join('\n')}
+${SERVICIOS.map((s) => enlace(`/servicios/${s.slug}`, `${s.resumen} Incluye: ${s.incluye.join(', ')}.`)).join('\n')}
 
 ## Marcas
 
@@ -161,12 +281,16 @@ ${SERVICIOS.map((s) => `- ${s.nombre} (${s.duracion}): ${s.resumen} Incluye: ${s
 - Lentes: ${BRANDS.lentes.join(', ')}
 - Accesorios: ${BRANDS.accesorios.join(', ')}
 
+## Guías
+
+${GUIAS.map((g) => enlace(`/guias/${g.slug}`, g.respuesta)).join('\n')}
+
 ## Páginas
 
-${Object.entries(ROUTES).map(([p, m]) => `- [${m.title}](${canonicalUrl(p)}): ${m.description}`).join('\n')}
+${paginas.map(([path, meta]) => enlace(path, meta.description)).join('\n')}
 
 ## Preguntas frecuentes
 
-${FAQS.map((f) => `### ${f.pregunta}\n\n${f.respuesta}`).join('\n\n')}
+${FAQS_GENERALES.flatMap((tema) => tema.preguntas).map((f) => `### ${f.pregunta}\n\n${f.respuesta}`).join('\n\n')}
 `
 }

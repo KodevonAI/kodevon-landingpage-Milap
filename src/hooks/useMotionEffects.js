@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { revealOnScroll, EASE_OUT, EASE_BACK } from './reveal'
+import { EASE_OUT, EASE_BACK } from './reveal'
 
 // Thin line at top of viewport that fills as you scroll
 export function useScrollProgress() {
@@ -53,58 +53,5 @@ export function useMagneticEffect(strength = 0.35) {
       el.removeEventListener('mouseleave', onLeave)
     }
   }, [strength])
-  return ref
-}
-
-// Animate elements with data-counter attribute counting up on scroll
-export function useCounterAnimation() {
-  const ref = useRef(null)
-  useEffect(() => {
-    const container = ref.current
-    if (!container) return
-    const els = [...container.querySelectorAll('[data-counter]')]
-    if (!els.length) return
-    const frames = new Set()
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.filter((entry) => entry.isIntersecting).forEach(({ target: el }) => {
-          observer.unobserve(el)
-          const end = parseFloat(el.dataset.counter)
-          const prefix = el.dataset.prefix || ''
-          const suffix = el.dataset.suffix || ''
-          const startTime = performance.now()
-          const tick = (now) => {
-            const t = Math.min((now - startTime) / 2000, 1)
-            el.textContent = prefix + Math.round(end * (1 - (1 - t) ** 2)) + suffix
-            if (t < 1) frames.add(requestAnimationFrame(tick))
-          }
-          frames.add(requestAnimationFrame(tick))
-        })
-      },
-      { rootMargin: '0px 0px -12% 0px' },
-    )
-    els.forEach((el) => observer.observe(el))
-    return () => {
-      observer.disconnect()
-      frames.forEach(cancelAnimationFrame)
-    }
-  }, [])
-  return ref
-}
-
-// Grid entrance: odd items fly from left, even from right, staggered
-export function useAlternatingEntrance() {
-  const ref = useRef(null)
-  useEffect(() => {
-    const container = ref.current
-    if (!container) return
-    return revealOnScroll(container, container.children, {
-      from: (i) => ({ opacity: '0', transform: `translate(${i % 2 === 0 ? -60 : 60}px, 20px) scale(0.88)` }),
-      duration: 0.7,
-      stagger: 0.1,
-      easing: EASE_BACK,
-      start: 0.82,
-    })
-  }, [])
   return ref
 }

@@ -5,7 +5,7 @@ import { FAQS_GENERALES } from './faqs.js'
 
 const SLUG = /^[a-z0-9-]+$/
 const FECHA = /^\d{4}-\d{2}-\d{2}$/
-const CAMPOS_SERVICIO = ['citaId', 'icono', 'nombre', 'duracion', 'title', 'description', 'h1', 'tarjeta', 'resumen', 'datos', 'incluye', 'pasos', 'paraQuien', 'faqs', 'guias']
+const CAMPOS_SERVICIO = ['citaId', 'icono', 'nombre', 'duracion', 'title', 'description', 'h1', 'tarjeta', 'resumen', 'descripcion', 'datos', 'incluye', 'pasos', 'paraQuien', 'faqs', 'guias']
 const CAMPOS_GUIA = ['title', 'description', 'h1', 'tarjeta', 'respuesta', 'secciones', 'cuandoConsultar', 'revisado', 'servicio']
 
 // Todas las cadenas de una entrada, sin importar la profundidad.
@@ -14,6 +14,21 @@ function cadenasDe(valor) {
   if (Array.isArray(valor)) return valor.flatMap(cadenasDe)
   if (valor && typeof valor === 'object') return Object.values(valor).flatMap(cadenasDe)
   return []
+}
+
+// Campos que no se muestran como texto de la página.
+const NO_VISIBLES = ['slug', 'citaId', 'icono', 'marcas', 'guias', 'title', 'description', 'tarjeta', 'revisado', 'servicio', 'tipo']
+
+// Palabras del texto visible de un servicio o una guía.
+export function palabrasDe(entrada) {
+  const visible = (valor) => {
+    if (Array.isArray(valor)) return valor.flatMap(visible)
+    if (valor && typeof valor === 'object') {
+      return Object.entries(valor).filter(([campo]) => !NO_VISIBLES.includes(campo)).flatMap(([, v]) => visible(v))
+    }
+    return typeof valor === 'string' ? [valor] : []
+  }
+  return visible(entrada).join(' ').split(/\s+/).filter(Boolean).length
 }
 
 const vacio = (valor) => valor == null || valor === '' || (Array.isArray(valor) && valor.length === 0)
