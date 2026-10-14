@@ -19,16 +19,22 @@ const links = [
   { label: 'Contacto', to: '/contacto' },
 ]
 
-const desktopLink = (isActive, onHero) =>
+const desktopBg = (isActive, onHero) =>
+  isActive
+    ? onHero ? 'bg-white/15' : 'bg-accent/8'
+    : onHero ? 'hover:bg-white/10' : 'hover:bg-muted'
+
+// conFondo=false cuando el fondo lo pinta el contenedor (item con flecha de submenú).
+const desktopLink = (isActive, onHero, conFondo = true) =>
   `block px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer ${
     isActive
       ? onHero
-        ? 'text-white font-semibold bg-white/15'
-        : 'text-accent font-semibold bg-accent/8'
+        ? 'text-white font-semibold'
+        : 'text-accent font-semibold'
       : onHero
-        ? 'text-white/65 hover:text-white hover:bg-white/10'
-        : 'text-slate hover:text-foreground hover:bg-muted'
-  }`
+        ? 'text-white/65 hover:text-white'
+        : 'text-slate hover:text-foreground'
+  } ${conFondo ? desktopBg(isActive, onHero) : ''}`
 
 const mobileLink = (isActive, onHero) =>
   `block w-full text-left px-4 py-3 rounded-xl font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
@@ -116,8 +122,17 @@ export default function Navbar() {
           <ul className="hidden md:flex items-center gap-1">
             {links.map(({ label, to, hijos }) => (
               <li key={to} className="relative group">
-                <span className="flex items-center">
-                  <NavLink to={to} onClick={cerrar} className={({ isActive }) => desktopLink(isActive, onHero)}>
+                <span
+                  className={`flex items-center ${
+                    hijos
+                      ? `pr-1.5 rounded-lg transition-all duration-150 ${desktopBg(
+                          location.pathname === to || location.pathname.startsWith(`${to}/`),
+                          onHero,
+                        )}`
+                      : ''
+                  }`}
+                >
+                  <NavLink to={to} onClick={cerrar} className={({ isActive }) => desktopLink(isActive, onHero, !hijos)}>
                     {label}
                   </NavLink>
                   {hijos && (
