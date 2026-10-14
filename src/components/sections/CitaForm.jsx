@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FaWhatsapp } from 'react-icons/fa'
-import { SERVICES, SCHEDULE } from '../../utils/constants'
+import { SCHEDULE } from '../../content/site'
+import { SERVICIOS } from '../../content/servicios'
 import { openWhatsApp } from '../../utils/whatsapp'
 import Button from '../common/Button'
 
@@ -69,8 +70,8 @@ export default function CitaForm() {
           <label htmlFor="cita-service" className="block text-sm font-semibold text-gray-700 mb-2">Servicio *</label>
           <select id="cita-service" name="service" required className={inputClass} defaultValue="">
             <option value="" disabled>Selecciona un servicio</option>
-            {SERVICES.map((s) => (
-              <option key={s.id} value={s.name}>{s.name}</option>
+            {SERVICIOS.map((s) => (
+              <option key={s.citaId} value={s.nombre}>{s.nombre}</option>
             ))}
           </select>
         </div>

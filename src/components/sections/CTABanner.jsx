@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import ScrollReveal from '../animations/ScrollReveal'
 import { FiArrowRight, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { BUSINESS } from '../../utils/constants'
+import { BUSINESS } from '../../content/site'
 
 const MotionLink = motion.create(Link)
 

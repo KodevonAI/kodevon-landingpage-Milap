@@ -1,6 +1,6 @@
 import { FiInstagram, FiPhone, FiMail } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { BUSINESS } from '../../utils/constants'
+import { BUSINESS } from '../../content/site'
 import ScrollReveal from '../animations/ScrollReveal'
 import ContactForm from './ContactForm'
 

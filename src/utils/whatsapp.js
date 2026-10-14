@@ -1,4 +1,4 @@
-import { BUSINESS } from './constants'
+import { BUSINESS } from '../content/site'
 
 // Abre WhatsApp (app o web) con el mensaje ya escrito para la óptica.
 export function openWhatsApp(lines) {

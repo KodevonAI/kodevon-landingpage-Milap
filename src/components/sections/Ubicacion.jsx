@@ -1,5 +1,5 @@
 import { FiMapPin, FiExternalLink } from 'react-icons/fi'
-import { BUSINESS } from '../../utils/constants'
+import { BUSINESS } from '../../content/site'
 import ScrollReveal from '../animations/ScrollReveal'
 
 // Embed público de Google Maps: no requiere API key.

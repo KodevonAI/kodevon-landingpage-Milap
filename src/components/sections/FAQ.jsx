@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FiPlus, FiMinus } from 'react-icons/fi'
-import { FAQS } from '../../utils/constants'
+import { FAQS_GENERALES } from '../../content/faqs'
+
+const FAQS = FAQS_GENERALES.flatMap((tema) => tema.preguntas)
 import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
 import ScrollReveal from '../animations/ScrollReveal'
 
@@ -42,7 +44,7 @@ export default function FAQ() {
                 aria-expanded={open === i}
                 aria-controls={`faq-answer-${i}`}
               >
-                <span className="font-semibold text-foreground pr-4 text-sm leading-snug">{faq.question}</span>
+                <span className="font-semibold text-foreground pr-4 text-sm leading-snug">{faq.pregunta}</span>
                 <span
                   className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
                     open === i ? 'bg-accent text-white rotate-0' : 'bg-muted text-slate'
@@ -63,7 +65,7 @@ export default function FAQ() {
                 style={{ height: 0 }}
                 aria-hidden={open !== i}
               >
-                <p className="px-6 pb-5 text-slate text-sm leading-relaxed">{faq.answer}</p>
+                <p className="px-6 pb-5 text-slate text-sm leading-relaxed">{faq.respuesta}</p>
               </motion.div>
             </div>
           ))}

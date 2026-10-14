@@ -1,6 +1,10 @@
-import { BUSINESS, BRANDS, FAQS, GOOGLE_REVIEWS, PHOTOS, SERVICES } from '../utils/constants'
+import { SITE_URL, BUSINESS, BRANDS, GOOGLE_REVIEWS, PHOTOS } from '../content/site.js'
+import { SERVICIOS } from '../content/servicios.js'
+import { FAQS_GENERALES } from '../content/faqs.js'
 
-export const SITE_URL = 'https://www.opticamilap.com'
+const FAQS = FAQS_GENERALES.flatMap((tema) => tema.preguntas)
+
+export { SITE_URL }
 export const OG_IMAGE = `${SITE_URL}/og-image.jpg`
 
 // Metadatos por ruta. Los usa <Seo /> en el cliente y scripts/prerender.js en el build.
@@ -89,7 +93,7 @@ export const localBusinessSchema = {
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Servicios de óptica y optometría',
-    itemListElement: SERVICES.map(({ name, description }) => ({
+    itemListElement: SERVICIOS.map(({ nombre: name, resumen: description }) => ({
       '@type': 'Offer',
       itemOffered: { '@type': 'Service', name, description, areaServed: 'Popayán' },
     })),
@@ -120,7 +124,7 @@ export function breadcrumbSchema(pathname) {
 export const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: FAQS.map(({ question, answer }) => ({
+  mainEntity: FAQS.map(({ pregunta: question, respuesta: answer }) => ({
     '@type': 'Question',
     name: question,
     acceptedAnswer: { '@type': 'Answer', text: answer },
@@ -149,7 +153,7 @@ export function llmsTxt() {
 
 ## Servicios
 
-${SERVICES.map((s) => `- ${s.name} (${s.duration}): ${s.description} Incluye: ${s.details.join(', ')}.`).join('\n')}
+${SERVICIOS.map((s) => `- ${s.nombre} (${s.duracion}): ${s.resumen} Incluye: ${s.incluye.join(', ')}.`).join('\n')}
 
 ## Marcas
 
@@ -163,6 +167,6 @@ ${Object.entries(ROUTES).map(([p, m]) => `- [${m.title}](${canonicalUrl(p)}): ${
 
 ## Preguntas frecuentes
 
-${FAQS.map((f) => `### ${f.question}\n\n${f.answer}`).join('\n\n')}
+${FAQS.map((f) => `### ${f.pregunta}\n\n${f.respuesta}`).join('\n\n')}
 `
 }

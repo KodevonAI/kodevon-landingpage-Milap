@@ -1,5 +1,5 @@
 import { FiStar, FiExternalLink, FiEdit3 } from 'react-icons/fi'
-import { GOOGLE_REVIEWS } from '../../utils/constants'
+import { GOOGLE_REVIEWS } from '../../content/site'
 import ScrollReveal from '../animations/ScrollReveal'
 
 const { rating, count, fiveStar, checked, url, writeUrl } = GOOGLE_REVIEWS

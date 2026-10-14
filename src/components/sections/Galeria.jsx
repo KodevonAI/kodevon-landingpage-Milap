@@ -1,4 +1,4 @@
-import { PHOTOS } from '../../utils/constants'
+import { PHOTOS } from '../../content/site'
 import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
 import ScrollReveal from '../animations/ScrollReveal'
 

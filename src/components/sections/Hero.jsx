@@ -3,7 +3,7 @@ import { FiArrowRight, FiStar, FiClock, FiAward } from 'react-icons/fi'
 import Button from '../common/Button'
 import { useMagneticEffect } from '../../hooks/useMotionEffects'
 import { ShaderBackground } from '../ui/hero-shader'
-import { GOOGLE_REVIEWS } from '../../utils/constants'
+import { GOOGLE_REVIEWS } from '../../content/site'
 
 const RATING = GOOGLE_REVIEWS.rating.toLocaleString('es-CO')
 

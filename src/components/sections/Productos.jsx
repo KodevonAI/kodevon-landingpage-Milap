@@ -1,6 +1,6 @@
 import { useStaggerAnimation } from '../../hooks/useScrollAnimation'
 import ScrollReveal from '../animations/ScrollReveal'
-import { BRANDS } from '../../utils/constants'
+import { BRANDS } from '../../content/site'
 
 const categories = [
   {

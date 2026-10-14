@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { FiInstagram, FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { BUSINESS } from '../../utils/constants'
+import { BUSINESS } from '../../content/site'
 import logo from '../../assets/logo.webp'
 
 const quickLinks = [
